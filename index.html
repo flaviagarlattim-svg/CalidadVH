@@ -431,6 +431,14 @@ select:focus { border-color: #e8390e; box-shadow: 0 0 0 3px rgba(232,57,14,0.12)
         </div>
       </div>
 
+      <!-- EVOLUCIÓN MENCIONES REVINATE -->
+      <div class="card">
+        <div class="chart-title">Evolución de menciones mes a mes</div>
+        <div class="legend" id="legMenRev"></div>
+        <div style="position:relative;height:220px"><canvas id="menRevChart"></canvas></div>
+        <p class="chart-sub">Total menciones OTAs + General A&amp;B por mes · responde a filtros de año y sede</p>
+      </div>
+
     </div>
 
     <!-- ══ TAB: OTAS ══ -->
@@ -497,6 +505,14 @@ select:focus { border-color: #e8390e; box-shadow: 0 0 0 3px rgba(232,57,14,0.12)
             <p class="chart-sub">Menciones por sede</p>
           </div>
         </div>
+      </div>
+
+      <!-- EVOLUCIÓN MENCIONES OTAs -->
+      <div class="card">
+        <div class="chart-title">Evolución de menciones mes a mes</div>
+        <div class="legend" id="legMenEvolOta"></div>
+        <div style="position:relative;height:220px"><canvas id="menEvolOtaChart"></canvas></div>
+        <p class="chart-sub">Menciones por OTA a lo largo del tiempo · responde a filtros de año y sede</p>
       </div>
 
       <!-- POPULAR TOPICS -->
@@ -1173,10 +1189,54 @@ function buildPopularTopics(){
   container.innerHTML=html;
 }
 
+function buildMenRev(){
+  const{anio,sede}=getF();
+  // OTA mentions filtered by anio+sede
+  const otaF=otaRaw.filter(r=>(anio==='ALL'||r.anio==anio)&&(sede==='ALL'||r.sede===sede));
+  // GAB mentions filtered by anio+sede
+  const gabF=gabRaw.filter(r=>(anio==='ALL'||r.anio==anio)&&(sede==='ALL'||r.sede===sede));
+  const availM=[...new Set([...otaF.map(r=>r.mes),...gabF.map(r=>r.mes)])].sort((a,b)=>meses.indexOf(a)-meses.indexOf(b));
+  const labels=availM.map(m=>m.charAt(0)+m.slice(1).toLowerCase());
+  const otaMen=availM.map(m=>otaF.filter(r=>r.mes===m).reduce((a,r)=>a+r.mentions,0));
+  const gabMen=availM.map(m=>gabF.filter(r=>r.mes===m).reduce((a,r)=>a+r.mentions,0));
+  document.getElementById('legMenRev').innerHTML=
+    `<span><span class="legend-dot" style="background:#e8390e"></span>OTAs</span>`+
+    `<span><span class="legend-dot" style="background:#0ea5e9"></span>General A&B</span>`;
+  if(window.menRevCI)window.menRevCI.destroy();
+  window.menRevCI=new Chart(document.getElementById('menRevChart'),{
+    type:'line',
+    data:{labels,datasets:[
+      {label:'OTAs',data:otaMen,borderColor:'#e8390e',backgroundColor:'#e8390e22',tension:0.4,pointRadius:5,pointBackgroundColor:'#e8390e',borderWidth:2,fill:true},
+      {label:'General A&B',data:gabMen,borderColor:'#0ea5e9',backgroundColor:'#0ea5e922',tension:0.4,pointRadius:5,pointBackgroundColor:'#0ea5e9',borderWidth:2,fill:true}
+    ]},
+    options:{...base,scales:{x:{...base.scales.x},y:{...base.scales.y,beginAtZero:true,ticks:{...tk,stepSize:5}}}}
+  });
+}
+
+function buildMenEvolOta(){
+  const{anio,sede}=getF();
+  const otaF=otaRaw.filter(r=>(anio==='ALL'||r.anio==anio)&&(sede==='ALL'||r.sede===sede));
+  const availM=[...new Set(otaF.map(r=>r.mes))].sort((a,b)=>meses.indexOf(a)-meses.indexOf(b));
+  const labels=availM.map(m=>m.charAt(0)+m.slice(1).toLowerCase());
+  const ds=otaList.map(ota=>({
+    label:ota,
+    data:availM.map(m=>otaF.filter(r=>r.ota===ota&&r.mes===m).reduce((a,r)=>a+r.mentions,0)||null),
+    borderColor:otaColors[ota],backgroundColor:otaColors[ota]+'22',
+    tension:0.4,pointRadius:4,pointBackgroundColor:otaColors[ota],borderWidth:2,fill:false
+  }));
+  document.getElementById('legMenEvolOta').innerHTML=otaList.map(o=>`<span><span class="legend-dot" style="background:${otaColors[o]}"></span>${o}</span>`).join('');
+  if(window.menEvolOtaCI)window.menEvolOtaCI.destroy();
+  window.menEvolOtaCI=new Chart(document.getElementById('menEvolOtaChart'),{
+    type:'line',
+    data:{labels,datasets:ds},
+    options:{...base,scales:{x:{...base.scales.x},y:{...base.scales.y,beginAtZero:true,ticks:{...tk,stepSize:5}}}}
+  });
+}
+
 window.setSede=s=>{selSede=s;buildSedeTabs();buildLine();};
 window.setGab=s=>{selGab=s;buildSedeTabs();buildGab();};
 window.resetFilters=function(){['anioFilter','mesFilter','catFilter','sedeFilter'].forEach(id=>{document.getElementById(id).value='ALL';});refresh();};
-function refresh(){buildSedeTabs();buildMetrics();buildBar();buildLine();buildOta();buildGab();buildRanking();buildPopularTopics();}
+function refresh(){buildSedeTabs();buildMetrics();buildBar();buildLine();buildOta();buildGab();buildRanking();buildPopularTopics();buildMenRev();buildMenEvolOta();}
 ['anioFilter','mesFilter','catFilter','sedeFilter'].forEach(id=>document.getElementById(id).addEventListener('change',refresh));
 window.onload=function(){switchTab('revinate');refresh();};
 </script>
