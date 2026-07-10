@@ -759,7 +759,37 @@ const raw=[
   {sede:'SMR',anio:2026,mes:'MAYO',cat:'Servicio',score:87.3},
   {sede:'TAY',anio:2026,mes:'MAYO',cat:'Calidad bebidas',score:81.7},
   {sede:'TAY',anio:2026,mes:'MAYO',cat:'Calidad comida',score:86.6},
-  {sede:'TAY',anio:2026,mes:'MAYO',cat:'Servicio',score:90.24}
+  {sede:'TAY',anio:2026,mes:'MAYO',cat:'Servicio',score:90.24},
+  {sede:'BOG',anio:2026,mes:'JUNIO',cat:'Calidad comida',score:78.89},
+  {sede:'BOG',anio:2026,mes:'JUNIO',cat:'Calidad bebidas',score:94.95},
+  {sede:'BOG',anio:2026,mes:'JUNIO',cat:'Servicio',score:88.89},
+  {sede:'GET',anio:2026,mes:'JUNIO',cat:'Calidad comida',score:87.65},
+  {sede:'GET',anio:2026,mes:'JUNIO',cat:'Calidad bebidas',score:85.62},
+  {sede:'GET',anio:2026,mes:'JUNIO',cat:'Servicio',score:88.89},
+  {sede:'CTG',anio:2026,mes:'JUNIO',cat:'Calidad comida',score:85.71},
+  {sede:'CTG',anio:2026,mes:'JUNIO',cat:'Calidad bebidas',score:92.06},
+  {sede:'CTG',anio:2026,mes:'JUNIO',cat:'Servicio',score:90.28},
+  {sede:'MDE',anio:2026,mes:'JUNIO',cat:'Calidad comida',score:73.1},
+  {sede:'MDE',anio:2026,mes:'JUNIO',cat:'Calidad bebidas',score:81.7},
+  {sede:'MDE',anio:2026,mes:'JUNIO',cat:'Servicio',score:86.55},
+  {sede:'GTP',anio:2026,mes:'JUNIO',cat:'Calidad comida',score:79.89},
+  {sede:'GTP',anio:2026,mes:'JUNIO',cat:'Calidad bebidas',score:87.3},
+  {sede:'GTP',anio:2026,mes:'JUNIO',cat:'Servicio',score:92.06},
+  {sede:'SAL',anio:2026,mes:'JUNIO',cat:'Calidad comida',score:96.83},
+  {sede:'SAL',anio:2026,mes:'JUNIO',cat:'Calidad bebidas',score:96.83},
+  {sede:'SAL',anio:2026,mes:'JUNIO',cat:'Servicio',score:92.42},
+  {sede:'SAI',anio:2026,mes:'JUNIO',cat:'Calidad comida',score:83.33},
+  {sede:'SAI',anio:2026,mes:'JUNIO',cat:'Calidad bebidas',score:83.33},
+  {sede:'SAI',anio:2026,mes:'JUNIO',cat:'Servicio',score:93.06},
+  {sede:'CLO',anio:2026,mes:'JUNIO',cat:'Calidad comida',score:64.81},
+  {sede:'CLO',anio:2026,mes:'JUNIO',cat:'Calidad bebidas',score:94.44},
+  {sede:'CLO',anio:2026,mes:'JUNIO',cat:'Servicio',score:83.33},
+  {sede:'TAY',anio:2026,mes:'JUNIO',cat:'Calidad comida',score:87.18},
+  {sede:'TAY',anio:2026,mes:'JUNIO',cat:'Calidad bebidas',score:86.89},
+  {sede:'TAY',anio:2026,mes:'JUNIO',cat:'Servicio',score:95.73},
+  {sede:'SMR',anio:2026,mes:'JUNIO',cat:'Calidad comida',score:91.92},
+  {sede:'SMR',anio:2026,mes:'JUNIO',cat:'Calidad bebidas',score:93.52},
+  {sede:'SMR',anio:2026,mes:'JUNIO',cat:'Servicio',score:99.07}
 ];
 
 const otaRaw=[
@@ -1091,30 +1121,36 @@ function buildMetrics(){
   const vs=visSedes();
   const best=vs.map(s=>{const sc=d.filter(r=>r.sede===s&&r.score!==null).map(r=>r.score);return{s,a:avg(sc)};}).filter(x=>x.a!==null).sort((a,b)=>b.a-a.a);
   const worst=[...best].reverse();
-  // REVINATE metrics (3 cards: score global, mejor sede, sede menor)
+  const totalMenRev=fOta().reduce((a,r)=>a+r.mentions,0)+fGab().reduce((a,r)=>a+r.mentions,0);
+  // REVINATE metrics (4 cards)
   document.getElementById('metricCardsRevinate').innerHTML=`
     <div class="metric"><div class="metric-label">Score global</div><div class="metric-value accent">${ga!==null?ga.toFixed(1)+'%':'—'}</div><div class="metric-sub">Satisfaction score</div></div>
     <div class="metric"><div class="metric-label">Mejor sede</div><div class="metric-value">${best.length?best[0].s:'—'}</div><div class="metric-sub">${best.length?best[0].a.toFixed(1)+'%':''}</div></div>
     <div class="metric"><div class="metric-label">Sede menor score</div><div class="metric-value">${worst.length?worst[0].s:'—'}</div><div class="metric-sub">${worst.length?worst[0].a.toFixed(1)+'%':''}</div></div>
+    <div class="metric"><div class="metric-label">Total menciones</div><div class="metric-value">${totalMenRev.toLocaleString()}</div><div class="metric-sub">OTAs + General A&amp;B</div></div>
   `;
-  // OTAS metrics (2 cards: score global OTAs, total menciones)
+  document.getElementById('metricCardsRevinate').style.gridTemplateColumns='repeat(4,minmax(0,1fr))';
+  // OTAS metrics
   const filtOta=fOta();
-  const otaScores=filtOta.filter(r=>r.score!==null).map(r=>r.score);
-  const otaAvg=avg(otaScores);
-  const totalMen=filtOta.reduce((a,r)=>a+r.mentions,0)+fGab().reduce((a,r)=>a+r.mentions,0);
+  const otaAvg=avg(filtOta.filter(r=>r.score!==null).map(r=>r.score));
+  const totalMenOta=filtOta.reduce((a,r)=>a+r.mentions,0)+fGab().reduce((a,r)=>a+r.mentions,0);
   document.getElementById('metricCardsOtas').innerHTML=`
     <div class="metric"><div class="metric-label">Score global OTAs</div><div class="metric-value accent">${otaAvg!==null?otaAvg.toFixed(1)+'%':'—'}</div><div class="metric-sub">Promedio todas las OTAs</div></div>
-    <div class="metric"><div class="metric-label">Total menciones</div><div class="metric-value">${totalMen.toLocaleString()}</div><div class="metric-sub">OTAs + General A&amp;B</div></div>
+    <div class="metric"><div class="metric-label">Total menciones</div><div class="metric-value">${totalMenOta.toLocaleString()}</div><div class="metric-sub">OTAs + General A&amp;B</div></div>
   `;
 }
 
 window.switchTab=function(tab){
-  document.getElementById('pageRevinate').style.display=tab==='revinate'?'flex':'none';
-  document.getElementById('pageRevinate').style.flexDirection='column';
-  document.getElementById('pageOtas').style.display=tab==='otas'?'flex':'none';
-  document.getElementById('pageOtas').style.flexDirection='column';
-  document.getElementById('tabRevinate').classList.toggle('active',tab==='revinate');
-  document.getElementById('tabOtas').classList.toggle('active',tab==='otas');
+  ['revinate','otas','google'].forEach(t=>{
+    const el=document.getElementById('page'+t.charAt(0).toUpperCase()+t.slice(1));
+    if(el){el.style.display='none';}
+    const tb=document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1));
+    if(tb){tb.classList.remove('active');}
+  });
+  const page=document.getElementById('page'+tab.charAt(0).toUpperCase()+tab.slice(1));
+  if(page){page.style.display='flex';page.style.flexDirection='column';}
+  const tabEl=document.getElementById('tab'+tab.charAt(0).toUpperCase()+tab.slice(1));
+  if(tabEl){tabEl.classList.add('active');}
 };
 
 function buildBar(){
@@ -1461,15 +1497,6 @@ function buildGoogle(){
 
 window.setSede=s=>{selSede=s;buildSedeTabs();buildLine();};
 window.setGab=s=>{selGab=s;buildSedeTabs();buildGab();};
-window.switchTab=function(tab){
-  ['revinate','otas','google'].forEach(t=>{
-    document.getElementById('page'+t.charAt(0).toUpperCase()+t.slice(1)).style.display='none';
-    document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1)).classList.remove('active');
-  });
-  document.getElementById('page'+tab.charAt(0).toUpperCase()+tab.slice(1)).style.display='flex';
-  document.getElementById('page'+tab.charAt(0).toUpperCase()+tab.slice(1)).style.flexDirection='column';
-  document.getElementById('tab'+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add('active');
-};
 window.resetFilters=function(){['anioFilter','mesFilter','catFilter','sedeFilter'].forEach(id=>{document.getElementById(id).value='ALL';});refresh();};
 function refresh(){buildSedeTabs();buildMetrics();buildBar();buildLine();buildOta();buildGab();buildRanking();buildPopularTopics();buildMenRev();buildMenEvolOta();buildGoogle();}
 ['anioFilter','mesFilter','catFilter','sedeFilter'].forEach(id=>document.getElementById(id).addEventListener('change',refresh));
