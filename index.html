@@ -343,6 +343,7 @@ select:focus { border-color: #e8390e; box-shadow: 0 0 0 3px rgba(232,57,14,0.12)
           <option value="MAYO">Mayo</option>
           <option value="JUNIO">Junio</option>
           <option value="JULIO">Julio</option>
+          <option value="JULIO">Julio</option>
           <option value="AGOSTO">Agosto</option>
           <option value="SEPTIEMBRE">Septiembre</option>
           <option value="OCTUBRE">Octubre</option>
@@ -386,6 +387,7 @@ select:focus { border-color: #e8390e; box-shadow: 0 0 0 3px rgba(232,57,14,0.12)
     <div class="page-tabs-bar">
       <button class="page-tab active" id="tabRevinate" onclick="switchTab('revinate')">REVINATE</button>
       <button class="page-tab" id="tabOtas" onclick="switchTab('otas')">OTAs</button>
+      <button class="page-tab" id="tabGoogle" onclick="switchTab('google')">GOOGLE A&amp;B</button>
     </div>
 
     <!-- ══ TAB: REVINATE ══ -->
@@ -522,6 +524,48 @@ select:focus { border-color: #e8390e; box-shadow: 0 0 0 3px rgba(232,57,14,0.12)
       </div>
 
     </div><!-- end pageOtas -->
+
+    <!-- ══ TAB: GOOGLE A&B ══ -->
+    <div id="pageGoogle" style="display:none">
+
+      <!-- METRICS GOOGLE -->
+      <div class="metrics" style="grid-template-columns:repeat(3,minmax(0,1fr))" id="metricCardsGoogle"></div>
+
+      <!-- PUNTUACIÓN POR SEDE — BARRAS -->
+      <div class="grid2">
+        <div class="card">
+          <div class="chart-title">Puntuación por sede</div>
+          <div class="legend" id="legGoogleBar"></div>
+          <div style="position:relative;height:240px"><canvas id="googleBarChart"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="chart-title">Evolución mensual de puntuación</div>
+          <div class="legend" id="legGoogleLine"></div>
+          <div style="position:relative;height:240px"><canvas id="googleLineChart"></canvas></div>
+        </div>
+      </div>
+
+      <!-- MENCIONES POR SEDE + EVOLUCIÓN MENCIONES -->
+      <div class="grid2">
+        <div class="card">
+          <div class="chart-title">Menciones por sede</div>
+          <div class="legend" id="legGoogleMenBar"></div>
+          <div style="position:relative;height:240px"><canvas id="googleMenBarChart"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="chart-title">Evolución de menciones mes a mes</div>
+          <div class="legend" id="legGoogleMenLine"></div>
+          <div style="position:relative;height:240px"><canvas id="googleMenLineChart"></canvas></div>
+        </div>
+      </div>
+
+      <!-- TABLA DETALLE -->
+      <div class="card">
+        <div class="chart-title" style="margin-bottom:14px">Detalle por sede y mes</div>
+        <div id="googleTable"></div>
+      </div>
+
+    </div><!-- end pageGoogle -->
 
   </main>
 </div>
@@ -859,7 +903,35 @@ const otaRaw=[
   {sede:'SMR',anio:2026,mes:'MAYO',ota:'HOSTELWORLD',score:82,mentions:5},
   {sede:'TAY',anio:2026,mes:'MAYO',ota:'BOOKING',score:48,mentions:4},
   {sede:'TAY',anio:2026,mes:'MAYO',ota:'GOOGLE',score:72,mentions:7},
-  {sede:'TAY',anio:2026,mes:'MAYO',ota:'HOSTELWORLD',score:61,mentions:3}
+  {sede:'TAY',anio:2026,mes:'MAYO',ota:'HOSTELWORLD',score:61,mentions:3},
+  {sede:'BOG',anio:2026,mes:'JUNIO',ota:'BOOKING',score:81,mentions:9},
+  {sede:'BOG',anio:2026,mes:'JUNIO',ota:'GOOGLE',score:100,mentions:7},
+  {sede:'BOG',anio:2026,mes:'JUNIO',ota:'HOSTELWORLD',score:93,mentions:1},
+  {sede:'GET',anio:2026,mes:'JUNIO',ota:'BOOKING',score:66,mentions:4},
+  {sede:'GET',anio:2026,mes:'JUNIO',ota:'GOOGLE',score:100,mentions:1},
+  {sede:'GET',anio:2026,mes:'JUNIO',ota:'HOSTELWORLD',score:67,mentions:1},
+  {sede:'GET',anio:2026,mes:'JUNIO',ota:'EXPEDIA',score:50,mentions:1},
+  {sede:'GTP',anio:2026,mes:'JUNIO',ota:'BOOKING',score:69,mentions:7},
+  {sede:'GTP',anio:2026,mes:'JUNIO',ota:'GOOGLE',score:100,mentions:6},
+  {sede:'CLO',anio:2026,mes:'JUNIO',ota:'BOOKING',score:100,mentions:4},
+  {sede:'CLO',anio:2026,mes:'JUNIO',ota:'HOSTELWORLD',score:98,mentions:2},
+  {sede:'CTG',anio:2026,mes:'JUNIO',ota:'GOOGLE',score:82,mentions:4},
+  {sede:'CTG',anio:2026,mes:'JUNIO',ota:'HOSTELWORLD',score:90,mentions:5},
+  {sede:'MDE',anio:2026,mes:'JUNIO',ota:'BOOKING',score:74,mentions:10},
+  {sede:'MDE',anio:2026,mes:'JUNIO',ota:'GOOGLE',score:70,mentions:3},
+  {sede:'MDE',anio:2026,mes:'JUNIO',ota:'HOSTELWORLD',score:74,mentions:20},
+  {sede:'SAL',anio:2026,mes:'JUNIO',ota:'BOOKING',score:78,mentions:24},
+  {sede:'SAL',anio:2026,mes:'JUNIO',ota:'GOOGLE',score:45,mentions:5},
+  {sede:'SAL',anio:2026,mes:'JUNIO',ota:'HOSTELWORLD',score:74,mentions:5},
+  {sede:'SAL',anio:2026,mes:'JUNIO',ota:'TRIPADVISOR',score:23,mentions:2},
+  {sede:'SAI',anio:2026,mes:'JUNIO',ota:'BOOKING',score:81,mentions:1},
+  {sede:'SAI',anio:2026,mes:'JUNIO',ota:'GOOGLE',score:76,mentions:4},
+  {sede:'SAI',anio:2026,mes:'JUNIO',ota:'HOSTELWORLD',score:50,mentions:2},
+  {sede:'TAY',anio:2026,mes:'JUNIO',ota:'BOOKING',score:45,mentions:3},
+  {sede:'TAY',anio:2026,mes:'JUNIO',ota:'HOSTELWORLD',score:72,mentions:2},
+  {sede:'SMR',anio:2026,mes:'JUNIO',ota:'BOOKING',score:21,mentions:5},
+  {sede:'SMR',anio:2026,mes:'JUNIO',ota:'GOOGLE',score:77,mentions:4},
+  {sede:'SMR',anio:2026,mes:'JUNIO',ota:'HOSTELWORLD',score:71,mentions:3}
 ];
 
 const gabRaw=[
@@ -912,7 +984,17 @@ const gabRaw=[
   {sede:'SAI',anio:2026,mes:'MAYO',score:64,mentions:17},
   {sede:'SAL',anio:2026,mes:'MAYO',score:90,mentions:33},
   {sede:'SMR',anio:2026,mes:'MAYO',score:80,mentions:21},
-  {sede:'TAY',anio:2026,mes:'MAYO',score:63,mentions:14}
+  {sede:'TAY',anio:2026,mes:'MAYO',score:63,mentions:14},
+  {sede:'BOG',anio:2026,mes:'JUNIO',score:91,mentions:17},
+  {sede:'GET',anio:2026,mes:'JUNIO',score:70,mentions:7},
+  {sede:'GTP',anio:2026,mes:'JUNIO',score:85,mentions:13},
+  {sede:'CLO',anio:2026,mes:'JUNIO',score:99,mentions:6},
+  {sede:'CTG',anio:2026,mes:'JUNIO',score:87,mentions:9},
+  {sede:'MDE',anio:2026,mes:'JUNIO',score:74,mentions:33},
+  {sede:'SAL',anio:2026,mes:'JUNIO',score:70,mentions:36},
+  {sede:'SAI',anio:2026,mes:'JUNIO',score:69,mentions:7},
+  {sede:'TAY',anio:2026,mes:'JUNIO',score:56,mentions:5},
+  {sede:'SMR',anio:2026,mes:'JUNIO',score:52,mentions:12}
 ];
 
 const topicsData=[
@@ -985,8 +1067,8 @@ const allSedes=[...new Set(raw.map(r=>r.sede))].sort();
 const gabSedes=[...new Set(gabRaw.map(r=>r.sede))].sort();
 const catColors={'Calidad bebidas':'#e8390e','Calidad comida':'#0ea5e9','Servicio':'#f43f5e'};
 const catDash={'Calidad bebidas':[6,3],'Calidad comida':[3,2],'Servicio':[]};
-const otaList=['BOOKING','GOOGLE','HOSTELWORLD','TRIPADVISOR'];
-const otaColors={'BOOKING':'#e8390e','GOOGLE':'#0ea5e9','HOSTELWORLD':'#f43f5e','TRIPADVISOR':'#f97316'};
+const otaList=['BOOKING','GOOGLE','HOSTELWORLD','TRIPADVISOR','EXPEDIA'];
+const otaColors={'BOOKING':'#e8390e','GOOGLE':'#0ea5e9','HOSTELWORLD':'#f43f5e','TRIPADVISOR':'#f97316','EXPEDIA':'#8b5cf6'};
 const gabSedeColors=['#e8390e','#0ea5e9','#f43f5e','#f97316','#10b981','#8b5cf6','#ef4444','#06b6d4','#84cc16','#f59e0b'];
 
 function avg(arr){return arr.length?arr.reduce((a,b)=>a+b,0)/arr.length:null;}
@@ -1233,10 +1315,163 @@ function buildMenEvolOta(){
   });
 }
 
+const googleRaw=[
+  {fecha:'30-jun',pais:'COL',sede:'GET',anio:2026,mes:'JUNIO',score:4.9,mentions:80},
+  {fecha:'30-jun',pais:'COL',sede:'CTG',anio:2026,mes:'JUNIO',score:4.9,mentions:103},
+  {fecha:'30-jun',pais:'COL',sede:'SMR',anio:2026,mes:'JUNIO',score:4.8,mentions:762},
+  {fecha:'30-jun',pais:'COL',sede:'GTP',anio:2026,mes:'JUNIO',score:4.9,mentions:405},
+  {fecha:'30-jun',pais:'COL',sede:'BOG',anio:2026,mes:'JUNIO',score:4.9,mentions:796},
+  {fecha:'30-jun',pais:'COL',sede:'MDE',anio:2026,mes:'JUNIO',score:4.8,mentions:597},
+  {fecha:'30-jun',pais:'COL',sede:'SAL',anio:2026,mes:'JUNIO',score:4.8,mentions:617},
+  {fecha:'10-jul',pais:'COL',sede:'GET',anio:2026,mes:'JULIO',score:4.9,mentions:106},
+  {fecha:'10-jul',pais:'COL',sede:'CTG',anio:2026,mes:'JULIO',score:4.9,mentions:115},
+  {fecha:'10-jul',pais:'COL',sede:'SMR',anio:2026,mes:'JULIO',score:4.9,mentions:838},
+  {fecha:'10-jul',pais:'COL',sede:'GTP',anio:2026,mes:'JULIO',score:4.9,mentions:405},
+  {fecha:'10-jul',pais:'COL',sede:'BOG',anio:2026,mes:'JULIO',score:4.9,mentions:796},
+  {fecha:'10-jul',pais:'COL',sede:'MDE',anio:2026,mes:'JULIO',score:4.8,mentions:600},
+  {fecha:'10-jul',pais:'COL',sede:'SAL',anio:2026,mes:'JULIO',score:4.8,mentions:617},
+];
+
+const googleSedes=[...new Set(googleRaw.map(r=>r.sede))].sort();
+const googleMeses=[...new Set(googleRaw.map(r=>r.mes))];
+let googleBarCI,googleLineCI,googleMenBarCI,googleMenLineCI;
+
+function fGoogle(){
+  const{anio,mes,sede}=getF();
+  return googleRaw.filter(r=>(anio==='ALL'||r.anio==anio)&&(mes==='ALL'||r.mes===mes)&&(sede==='ALL'||r.sede===sede));
+}
+
+function buildGoogle(){
+  const d=fGoogle();
+  const{anio,mes,sede}=getF();
+
+  // ── METRICS ──
+  const scores=d.map(r=>r.score);
+  const globalAvg=scores.length?(scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(2):null;
+  const totalMen=d.reduce((a,r)=>a+r.mentions,0);
+  const bySede=googleSedes.filter(s=>sede==='ALL'||s===sede).map(s=>{const rows=d.filter(r=>r.sede===s);return rows.length?{sede:s,avg:rows.reduce((a,r)=>a+r.score,0)/rows.length}:null;}).filter(Boolean).sort((a,b)=>b.avg-a.avg);
+  const mejor=bySede[0];
+  document.getElementById('metricCardsGoogle').innerHTML=`
+    <div class="metric"><div class="metric-label">Puntuación global</div><div class="metric-value accent">${globalAvg||'—'}</div><div class="metric-sub">Promedio Google A&B</div></div>
+    <div class="metric"><div class="metric-label">Mejor sede</div><div class="metric-value">${mejor?mejor.sede:'—'}</div><div class="metric-sub">${mejor?mejor.avg.toFixed(2):''}</div></div>
+    <div class="metric"><div class="metric-label">Total menciones</div><div class="metric-value">${totalMen.toLocaleString()}</div><div class="metric-sub">período seleccionado</div></div>
+  `;
+
+  // ── BAR: puntuación por sede ──
+  const visS=googleSedes.filter(s=>sede==='ALL'||s===sede);
+  const barData=visS.map(s=>{const rows=d.filter(r=>r.sede===s);return rows.length?parseFloat((rows.reduce((a,r)=>a+r.score,0)/rows.length).toFixed(2)):null;});
+  document.getElementById('legGoogleBar').innerHTML='';
+  if(googleBarCI)googleBarCI.destroy();
+  googleBarCI=new Chart(document.getElementById('googleBarChart'),{type:'bar',data:{labels:visS,datasets:[{label:'Puntuación',data:barData,backgroundColor:'#e8390ebb',borderColor:'#e8390e',borderWidth:1,borderRadius:4}]},options:{...base,scales:{x:{...base.scales.x},y:{...base.scales.y,min:4,max:5,ticks:{...tk,callback:v=>v.toFixed(1)}}}}});
+
+  // ── LINE: evolución puntuación por mes (una línea por sede) ──
+  const availM=[...new Set(d.map(r=>r.mes))].sort((a,b)=>meses.indexOf(a)-meses.indexOf(b));
+  const lineLabels=availM.map(m=>m.charAt(0)+m.slice(1).toLowerCase());
+  const lineDs=visS.map((s,i)=>({label:s,data:availM.map(m=>{const r=d.find(x=>x.sede===s&&x.mes===m);return r?r.score:null;}),borderColor:gabSedeColors[i%gabSedeColors.length],backgroundColor:gabSedeColors[i%gabSedeColors.length]+'22',tension:0.4,pointRadius:4,pointBackgroundColor:gabSedeColors[i%gabSedeColors.length],borderWidth:2}));
+  document.getElementById('legGoogleLine').innerHTML=visS.map((s,i)=>`<span><span class="legend-dot" style="background:${gabSedeColors[i%gabSedeColors.length]}"></span>${s}</span>`).join('');
+  if(googleLineCI)googleLineCI.destroy();
+  googleLineCI=new Chart(document.getElementById('googleLineChart'),{type:'line',data:{labels:lineLabels,datasets:lineDs},options:{...base,scales:{x:{...base.scales.x},y:{...base.scales.y,min:4,max:5,ticks:{...tk,callback:v=>v.toFixed(1)}}}}});
+
+  // ── BAR: menciones por sede ──
+  const menData=visS.map(s=>d.filter(r=>r.sede===s).reduce((a,r)=>a+r.mentions,0)||null);
+  document.getElementById('legGoogleMenBar').innerHTML='';
+  if(googleMenBarCI)googleMenBarCI.destroy();
+  googleMenBarCI=new Chart(document.getElementById('googleMenBarChart'),{type:'bar',data:{labels:visS,datasets:[{label:'Menciones',data:menData,backgroundColor:'#0ea5e9bb',borderColor:'#0ea5e9',borderWidth:1,borderRadius:4}]},options:{...base,scales:{x:{...base.scales.x},y:{...base.scales.y,beginAtZero:true}}}});
+
+  // ── LINE: evolución menciones por mes (una línea por sede) ──
+  const menLineDs=visS.map((s,i)=>({label:s,data:availM.map(m=>{const r=d.find(x=>x.sede===s&&x.mes===m);return r?r.mentions:null;}),borderColor:gabSedeColors[i%gabSedeColors.length],backgroundColor:gabSedeColors[i%gabSedeColors.length]+'18',tension:0.4,pointRadius:4,pointBackgroundColor:gabSedeColors[i%gabSedeColors.length],borderWidth:2}));
+  document.getElementById('legGoogleMenLine').innerHTML=visS.map((s,i)=>`<span><span class="legend-dot" style="background:${gabSedeColors[i%gabSedeColors.length]}"></span>${s}</span>`).join('');
+  if(googleMenLineCI)googleMenLineCI.destroy();
+  googleMenLineCI=new Chart(document.getElementById('googleMenLineChart'),{type:'line',data:{labels:lineLabels,datasets:menLineDs},options:{...base,scales:{x:{...base.scales.x},y:{...base.scales.y,beginAtZero:true}}}});
+
+  // ── TABLA ──
+  const tableMeses=[...new Set(d.map(r=>r.mes))].sort((a,b)=>meses.indexOf(a)-meses.indexOf(b));
+
+  // Helper: semáforo delta
+  function semaforo(val, prev, isScore){
+    if(prev===null||prev===undefined) return '';
+    const delta=val-prev;
+    const isUp=delta>0, isFlat=delta===0;
+    const color=isUp?'#16a34a':isFlat?'#f59e0b':'#dc2626';
+    const arrow=isUp?'▲':isFlat?'●':'▼';
+    const fmt=isScore?Math.abs(delta).toFixed(2):Math.abs(Math.round(delta));
+    const label=isFlat?'sin cambio':`${arrow} ${fmt}`;
+    return `<span style="font-size:10px;font-weight:600;color:${color};display:block;margin-top:2px">${label}</span>`;
+  }
+
+  // Header: Sede + 2 sub-cols per month (Score | Menciones)
+  let th=`<thead>
+    <tr>
+      <th rowspan="2" style="text-align:left;padding:10px 12px;font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;border-bottom:2px solid #e2e8f0;background:#f8fafc;min-width:60px">Sede</th>
+      ${tableMeses.map(m=>`<th colspan="2" style="text-align:center;padding:8px 12px;font-size:11px;color:#1e293b;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;border-bottom:1px solid #e2e8f0;border-left:2px solid #e2e8f0;background:#f8fafc">${m.charAt(0)+m.slice(1).toLowerCase()}</th>`).join('')}
+    </tr>
+    <tr>
+      ${tableMeses.map(()=>`
+        <th style="text-align:center;padding:5px 10px;font-size:10px;color:#6366f1;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;border-bottom:2px solid #e2e8f0;border-left:2px solid #e2e8f0;background:#f8fafc;white-space:nowrap">Score</th>
+        <th style="text-align:center;padding:5px 10px;font-size:10px;color:#0ea5e9;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;border-bottom:2px solid #e2e8f0;background:#f8fafc;white-space:nowrap">Menciones</th>
+      `).join('')}
+    </tr>
+  </thead>`;
+
+  let rows='';
+  visS.forEach((s,si)=>{
+    const bg=si%2===0?'#f8fafc':'#fff';
+    let tr=`<tr style="background:${bg}">
+      <td style="padding:10px 12px;font-size:13px;font-weight:700;color:#1e293b;border-bottom:1px solid #f1f5f9;white-space:nowrap">${s}</td>`;
+    tableMeses.forEach((m,mi)=>{
+      const r=d.find(x=>x.sede===s&&x.mes===m);
+      const prev=mi>0?d.find(x=>x.sede===s&&x.mes===tableMeses[mi-1]):null;
+      if(r){
+        const scoreDelta=semaforo(r.score,prev?.score,true);
+        const menDelta=semaforo(r.mentions,prev?.mentions,false);
+        tr+=`
+          <td style="text-align:center;padding:10px 10px;border-bottom:1px solid #f1f5f9;border-left:2px solid #e2e8f0;background:${bg}">
+            <span style="font-size:15px;font-weight:700;color:#4f46e5">${r.score.toFixed(1)}</span>
+            ${scoreDelta}
+          </td>
+          <td style="text-align:center;padding:10px 10px;border-bottom:1px solid #f1f5f9;background:${bg}">
+            <span style="font-size:15px;font-weight:700;color:#0284c7">${r.mentions.toLocaleString()}</span>
+            ${menDelta}
+          </td>`;
+      } else {
+        tr+=`
+          <td style="text-align:center;padding:10px 10px;font-size:13px;color:#cbd5e1;border-bottom:1px solid #f1f5f9;border-left:2px solid #e2e8f0">—</td>
+          <td style="text-align:center;padding:10px 10px;font-size:13px;color:#cbd5e1;border-bottom:1px solid #f1f5f9">—</td>`;
+      }
+    });
+    tr+=`</tr>`;
+    rows+=tr;
+  });
+
+  // Legend
+  const legend=`<div style="display:flex;gap:16px;align-items:center;padding:10px 12px;background:#f8fafc;border-top:1px solid #e2e8f0;font-size:11px;color:#64748b;flex-wrap:wrap">
+    <span style="font-weight:600;color:#475569">Semáforo:</span>
+    <span style="color:#16a34a;font-weight:600">▲ Subió</span>
+    <span style="color:#f59e0b;font-weight:600">● Sin cambio</span>
+    <span style="color:#dc2626;font-weight:600">▼ Bajó</span>
+    <span style="margin-left:8px;color:#94a3b8">· el número indica cuánto cambió vs el mes anterior</span>
+  </div>`;
+
+  document.getElementById('googleTable').innerHTML=`
+    <div style="overflow-x:auto;border-radius:10px;border:1px solid #e2e8f0">
+      <table style="width:100%;border-collapse:collapse">${th}<tbody>${rows}</tbody></table>
+      ${legend}
+    </div>`;
+}
+
 window.setSede=s=>{selSede=s;buildSedeTabs();buildLine();};
 window.setGab=s=>{selGab=s;buildSedeTabs();buildGab();};
+window.switchTab=function(tab){
+  ['revinate','otas','google'].forEach(t=>{
+    document.getElementById('page'+t.charAt(0).toUpperCase()+t.slice(1)).style.display='none';
+    document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1)).classList.remove('active');
+  });
+  document.getElementById('page'+tab.charAt(0).toUpperCase()+tab.slice(1)).style.display='flex';
+  document.getElementById('page'+tab.charAt(0).toUpperCase()+tab.slice(1)).style.flexDirection='column';
+  document.getElementById('tab'+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add('active');
+};
 window.resetFilters=function(){['anioFilter','mesFilter','catFilter','sedeFilter'].forEach(id=>{document.getElementById(id).value='ALL';});refresh();};
-function refresh(){buildSedeTabs();buildMetrics();buildBar();buildLine();buildOta();buildGab();buildRanking();buildPopularTopics();buildMenRev();buildMenEvolOta();}
+function refresh(){buildSedeTabs();buildMetrics();buildBar();buildLine();buildOta();buildGab();buildRanking();buildPopularTopics();buildMenRev();buildMenEvolOta();buildGoogle();}
 ['anioFilter','mesFilter','catFilter','sedeFilter'].forEach(id=>document.getElementById(id).addEventListener('change',refresh));
 window.onload=function(){switchTab('revinate');refresh();};
 </script>
