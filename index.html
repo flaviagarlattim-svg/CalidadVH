@@ -417,6 +417,7 @@ select:focus { border-color: #e8390e; box-shadow: 0 0 0 3px rgba(232,57,14,0.12)
       <button class="page-tab active" id="tabRevinate" onclick="switchTab('revinate')">REVINATE</button>
       <button class="page-tab" id="tabOtas" onclick="switchTab('otas')">OTAs</button>
       <button class="page-tab" id="tabGoogle" onclick="switchTab('google')">GOOGLE A&amp;B</button>
+      <button class="page-tab" id="tabProducto" onclick="switchTab('producto')">EVALUACIÓN PRODUCTO</button>
     </div>
 
     <!-- ══ TAB: REVINATE ══ -->
@@ -588,6 +589,34 @@ select:focus { border-color: #e8390e; box-shadow: 0 0 0 3px rgba(232,57,14,0.12)
       </div>
 
     </div><!-- end pageGoogle -->
+
+    <!-- ══ TAB: EVALUACIÓN PRODUCTO ══ -->
+    <div id="pageProducto" style="display:none">
+
+      <!-- METRICS PRODUCTO -->
+      <div class="metrics" style="grid-template-columns:repeat(4,minmax(0,1fr))" id="metricCardsProducto"></div>
+
+      <!-- GRÁFICAS -->
+      <div class="grid2">
+        <div class="card">
+          <div class="chart-title">Puntaje por producto</div>
+          <div class="legend" id="legProdBar"></div>
+          <div style="position:relative;height:280px"><canvas id="prodBarChart"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="chart-title">Puntaje promedio por sede</div>
+          <div class="legend" id="legProdSede"></div>
+          <div style="position:relative;height:280px"><canvas id="prodSedeChart"></canvas></div>
+        </div>
+      </div>
+
+      <!-- TABLA DETALLE -->
+      <div class="card">
+        <div class="chart-title" style="margin-bottom:14px">Detalle de evaluaciones</div>
+        <div id="prodTable"></div>
+      </div>
+
+    </div><!-- end pageProducto -->
 
   </main>
 </div>
@@ -1701,7 +1730,7 @@ function buildMetrics(){
 }
 
 window.switchTab=function(tab){
-  ['revinate','otas','google'].forEach(t=>{
+  ['revinate','otas','google','producto'].forEach(t=>{
     const el=document.getElementById('page'+t.charAt(0).toUpperCase()+t.slice(1));
     if(el){el.style.display='none';}
     const tb=document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1));
@@ -1910,6 +1939,17 @@ function buildMenEvolOta(){
   });
 }
 
+const productoRaw=[
+  {pais:'COL',fecha:'2026-07-14',sede:'CTG',tipo:'BEBIDA',producto:'COCTEL VACILAO',score:0.975},
+  {pais:'COL',fecha:'2026-07-14',sede:'CTG',tipo:'PLATO',producto:'WRAP DE RES',score:1.0},
+  {pais:'COL',fecha:'2026-07-14',sede:'GET',tipo:'BEBIDA',producto:'COCTEL VIAJERO',score:1.0},
+  {pais:'COL',fecha:'2026-07-14',sede:'GET',tipo:'PLATO',producto:'HAMBURGUESA VIAJERO',score:1.0},
+  {pais:'COL',fecha:'2026-07-10',sede:'GTP',tipo:'BEBIDA',producto:'COCTEL MARGARITA',score:0.75},
+  {pais:'COL',fecha:'2026-07-11',sede:'SAL',tipo:'PLATO',producto:'LASAGNA BOLOGNESA',score:1.0},
+  {pais:'COL',fecha:'2026-07-10',sede:'TAY',tipo:'PLATO',producto:'CEVICHE DE PESCADO',score:0.8454},
+  {pais:'COL',fecha:'2026-07-14',sede:'SAL',tipo:'BEBIDA',producto:'COCTEL VIAJERO',score:0.925}
+];
+
 const googleRaw=[
   {fecha:'30-jun',pais:'COL',sede:'GET',anio:2026,mes:'JUNIO',score:4.9,mentions:80},
   {fecha:'30-jun',pais:'COL',sede:'CTG',anio:2026,mes:'JUNIO',score:4.9,mentions:103},
@@ -2080,7 +2120,75 @@ function updateSedeOptions(){
   }
 }
 
-function refresh(){buildSedeTabs();buildMetrics();buildBar();buildLine();buildOta();buildGab();buildRanking();buildPopularTopics();buildMenRev();buildMenEvolOta();buildGoogle();}
+function fProducto(){
+  const{pais,sede}=getF();
+  return productoRaw.filter(r=>(pais==='ALL'||r.pais===pais)&&(sede==='ALL'||r.sede===sede));
+}
+
+let prodBarCI,prodSedeCI;
+const tipoColors={'BEBIDA':'#e8390e','PLATO':'#0ea5e9'};
+
+function buildProducto(){
+  const d=fProducto();
+
+  // ── METRICS ──
+  const scores=d.map(r=>r.score);
+  const avgScore=scores.length?(scores.reduce((a,b)=>a+b,0)/scores.length*100):null;
+  const bebidas=d.filter(r=>r.tipo==='BEBIDA');
+  const platos=d.filter(r=>r.tipo==='PLATO');
+  const avgBeb=bebidas.length?(bebidas.reduce((a,r)=>a+r.score,0)/bebidas.length*100):null;
+  const avgPla=platos.length?(platos.reduce((a,r)=>a+r.score,0)/platos.length*100):null;
+  document.getElementById('metricCardsProducto').innerHTML=`
+    <div class="metric"><div class="metric-label">Puntaje global</div><div class="metric-value accent">${avgScore!==null?avgScore.toFixed(1)+'%':'—'}</div><div class="metric-sub">Promedio evaluaciones</div></div>
+    <div class="metric"><div class="metric-label">Evaluaciones</div><div class="metric-value">${d.length}</div><div class="metric-sub">productos evaluados</div></div>
+    <div class="metric"><div class="metric-label">Prom. bebidas</div><div class="metric-value">${avgBeb!==null?avgBeb.toFixed(1)+'%':'—'}</div><div class="metric-sub">${bebidas.length} bebida(s)</div></div>
+    <div class="metric"><div class="metric-label">Prom. platos</div><div class="metric-value">${avgPla!==null?avgPla.toFixed(1)+'%':'—'}</div><div class="metric-sub">${platos.length} plato(s)</div></div>
+  `;
+
+  // ── BAR: puntaje por producto ──
+  const sorted=[...d].sort((a,b)=>b.score-a.score);
+  const labels=sorted.map(r=>r.producto);
+  const barData=sorted.map(r=>parseFloat((r.score*100).toFixed(1)));
+  const barColors=sorted.map(r=>tipoColors[r.tipo]+'bb');
+  const barBorders=sorted.map(r=>tipoColors[r.tipo]);
+  document.getElementById('legProdBar').innerHTML=`<span><span class="legend-dot" style="background:#e8390e"></span>Bebida</span><span><span class="legend-dot" style="background:#0ea5e9"></span>Plato</span>`;
+  if(prodBarCI)prodBarCI.destroy();
+  prodBarCI=new Chart(document.getElementById('prodBarChart'),{type:'bar',data:{labels,datasets:[{label:'Puntaje',data:barData,backgroundColor:barColors,borderColor:barBorders,borderWidth:1,borderRadius:4}]},options:{...base,indexAxis:'y',scales:{x:{...base.scales.x,min:0,max:100,ticks:{...tk,callback:v=>v+'%'}},y:{...base.scales.y,ticks:{...tk,autoSkip:false,font:{size:10}}}}}});
+
+  // ── BAR: promedio por sede ──
+  const sedes=[...new Set(d.map(r=>r.sede))].sort();
+  const sedeData=sedes.map(s=>{const rows=d.filter(r=>r.sede===s);return parseFloat((rows.reduce((a,r)=>a+r.score,0)/rows.length*100).toFixed(1));});
+  document.getElementById('legProdSede').innerHTML='';
+  if(prodSedeCI)prodSedeCI.destroy();
+  prodSedeCI=new Chart(document.getElementById('prodSedeChart'),{type:'bar',data:{labels:sedes,datasets:[{label:'Puntaje promedio',data:sedeData,backgroundColor:'#e8390ebb',borderColor:'#e8390e',borderWidth:1,borderRadius:4}]},options:{...base,scales:{x:{...base.scales.x},y:{...base.scales.y,min:0,max:100,ticks:{...tk,callback:v=>v+'%'}}}}});
+
+  // ── TABLA ──
+  const tsorted=[...d].sort((a,b)=>a.sede.localeCompare(b.sede)||b.score-a.score);
+  let rows='';
+  tsorted.forEach((r,i)=>{
+    const bg=i%2===0?'#f8fafc':'#fff';
+    const pct=(r.score*100).toFixed(1);
+    const scoreColor=r.score>=0.95?'#16a34a':r.score>=0.85?'#f59e0b':'#dc2626';
+    const tipoBadge=r.tipo==='BEBIDA'?'background:#fff7ed;color:#c2340c':'background:#f0f9ff;color:#0369a1';
+    rows+=`<tr style="background:${bg}">
+      <td style="padding:10px 12px;font-size:13px;font-weight:600;color:#1e293b;border-bottom:1px solid #f1f5f9">${r.sede}</td>
+      <td style="padding:10px 12px;border-bottom:1px solid #f1f5f9"><span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:0.05em;${tipoBadge}">${r.tipo}</span></td>
+      <td style="padding:10px 12px;font-size:13px;color:#334155;border-bottom:1px solid #f1f5f9">${r.producto}</td>
+      <td style="padding:10px 12px;font-size:12px;color:#94a3b8;border-bottom:1px solid #f1f5f9">${r.fecha}</td>
+      <td style="text-align:right;padding:10px 12px;border-bottom:1px solid #f1f5f9"><span style="font-size:15px;font-weight:700;color:${scoreColor}">${pct}%</span></td>
+    </tr>`;
+  });
+  document.getElementById('prodTable').innerHTML=`<div style="overflow-x:auto;border-radius:10px;border:1px solid #e2e8f0"><table style="width:100%;border-collapse:collapse">
+    <thead><tr>
+      <th style="text-align:left;padding:10px 12px;font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;border-bottom:2px solid #e2e8f0;background:#f8fafc">Sede</th>
+      <th style="text-align:left;padding:10px 12px;font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;border-bottom:2px solid #e2e8f0;background:#f8fafc">Tipo</th>
+      <th style="text-align:left;padding:10px 12px;font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;border-bottom:2px solid #e2e8f0;background:#f8fafc">Producto</th>
+      <th style="text-align:left;padding:10px 12px;font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;border-bottom:2px solid #e2e8f0;background:#f8fafc">Fecha</th>
+      <th style="text-align:right;padding:10px 12px;font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;border-bottom:2px solid #e2e8f0;background:#f8fafc">Puntaje</th>
+    </tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+
+function refresh(){buildSedeTabs();buildMetrics();buildBar();buildLine();buildOta();buildGab();buildRanking();buildPopularTopics();buildMenRev();buildMenEvolOta();buildGoogle();buildProducto();}
 
 // El filtro de país repuebla las sedes antes de refrescar
 document.getElementById('paisFilter').addEventListener('change',function(){updateSedeOptions();refresh();});
