@@ -1857,23 +1857,26 @@ function buildOta(){
   const labels=fm.map(m=>m.charAt(0)+m.slice(1).toLowerCase());
 
   // Puntuación OTAs — barras por mes filtrado
-  const ds=otaList.map(ota=>({label:ota,data:fm.map(m=>{const rows=filtOta.filter(r=>r.ota===ota&&r.mes===m);const sc=rows.map(r=>r.score);return avg(sc)!==null?parseFloat(avg(sc).toFixed(1)):null;}),backgroundColor:otaColors[ota]+'bb',borderColor:otaColors[ota],borderWidth:1,borderRadius:4}));
-  document.getElementById('legOta').innerHTML=otaList.map(o=>`<span><span class="legend-dot" style="background:${otaColors[o]}"></span>${o}</span>`).join('');
+  const otasConScore=otaList.filter(ota=>filtOta.some(r=>r.ota===ota&&r.score!==null&&r.score!==undefined));
+  const ds=otasConScore.map(ota=>({label:ota,data:fm.map(m=>{const rows=filtOta.filter(r=>r.ota===ota&&r.mes===m);const sc=rows.map(r=>r.score);return avg(sc)!==null?parseFloat(avg(sc).toFixed(1)):null;}),backgroundColor:otaColors[ota]+'bb',borderColor:otaColors[ota],borderWidth:1,borderRadius:4}));
+  document.getElementById('legOta').innerHTML=otasConScore.map(o=>`<span><span class="legend-dot" style="background:${otaColors[o]}"></span>${o}</span>`).join('');
   if(oBI)oBI.destroy();
   oBI=new Chart(document.getElementById('otaBar'),{type:'bar',data:{labels,datasets:ds},options:{...base,scales:{x:{...base.scales.x},y:{...base.scales.y,min:40,max:100,ticks:{...tk,callback:v=>v+'%'}}}}});
 
   // Evolución mensual OTAs — líneas respetando anio+sede
   const otaForLine=otaRaw.filter(r=>(anio==='ALL'||r.anio==anio)&&(sede==='ALL'||r.sede===sede));
   const availMeses=[...new Set(otaForLine.map(r=>r.mes))].sort((a,b)=>meses.indexOf(a)-meses.indexOf(b));
-  const lineDs=otaList.map(ota=>({label:ota,data:availMeses.map(m=>{const rows=otaForLine.filter(r=>r.ota===ota&&r.mes===m);const sc=rows.map(r=>r.score);return avg(sc)!==null?parseFloat(avg(sc).toFixed(1)):null;}),borderColor:otaColors[ota],backgroundColor:otaColors[ota]+'18',tension:0.4,pointRadius:4,pointBackgroundColor:otaColors[ota],borderWidth:2}));
+  const otasLine=otaList.filter(ota=>otaForLine.some(r=>r.ota===ota&&r.score!==null&&r.score!==undefined));
+  const lineDs=otasLine.map(ota=>({label:ota,data:availMeses.map(m=>{const rows=otaForLine.filter(r=>r.ota===ota&&r.mes===m);const sc=rows.map(r=>r.score);return avg(sc)!==null?parseFloat(avg(sc).toFixed(1)):null;}),borderColor:otaColors[ota],backgroundColor:otaColors[ota]+'18',tension:0.4,pointRadius:4,pointBackgroundColor:otaColors[ota],borderWidth:2}));
   const lineLabels=availMeses.map(m=>m.charAt(0)+m.slice(1).toLowerCase());
-  document.getElementById('legOtaLine').innerHTML=otaList.map(o=>`<span><span class="legend-dot" style="background:${otaColors[o]}"></span>${o}</span>`).join('');
+  document.getElementById('legOtaLine').innerHTML=otasLine.map(o=>`<span><span class="legend-dot" style="background:${otaColors[o]}"></span>${o}</span>`).join('');
   if(otaLCI)otaLCI.destroy();
   otaLCI=new Chart(document.getElementById('otaLineChart'),{type:'line',data:{labels:lineLabels,datasets:lineDs},options:{...base,scales:{x:{...base.scales.x},y:{...base.scales.y,min:40,max:100,ticks:{...tk,callback:v=>v+'%'}}}}});
 
   // Menciones OTAs
-  const md=otaList.map(ota=>({label:ota,data:fm.map(m=>{const rows=filtOta.filter(r=>r.ota===ota&&r.mes===m);return rows.reduce((a,r)=>a+r.mentions,0)||null;}),backgroundColor:otaColors[ota]+'bb',borderColor:otaColors[ota],borderWidth:1,borderRadius:4}));
-  document.getElementById('legMen').innerHTML=otaList.map(o=>`<span><span class="legend-dot" style="background:${otaColors[o]}"></span>${o}</span>`).join('');
+  const otasConMen=otaList.filter(ota=>filtOta.some(r=>r.ota===ota&&r.mentions>0));
+  const md=otasConMen.map(ota=>({label:ota,data:fm.map(m=>{const rows=filtOta.filter(r=>r.ota===ota&&r.mes===m);return rows.reduce((a,r)=>a+r.mentions,0)||null;}),backgroundColor:otaColors[ota]+'bb',borderColor:otaColors[ota],borderWidth:1,borderRadius:4}));
+  document.getElementById('legMen').innerHTML=otasConMen.map(o=>`<span><span class="legend-dot" style="background:${otaColors[o]}"></span>${o}</span>`).join('');
   if(mBI)mBI.destroy();
   mBI=new Chart(document.getElementById('menBar'),{type:'bar',data:{labels,datasets:md},options:{...base,scales:{x:{...base.scales.x},y:{...base.scales.y,beginAtZero:true}}}});
 }
