@@ -2036,16 +2036,17 @@ const productoRaw=[
   {pais:'COL',fecha:'2026-07-15',sede:'CLO',tipo:'BEBIDA',producto:'COCTEL ESPRESSO MARTINI',score:0.95},
   {pais:'COL',fecha:'2026-07-15',sede:'CLO',tipo:'PLATO',producto:'BOWL DE POLLO',score:0.974},
   {pais:'COL',fecha:'2026-07-14',sede:'CTG',tipo:'BEBIDA',producto:'COCTEL VACILAO',score:0.975},
-  {pais:'COL',fecha:'2026-07-14',sede:'CTG',tipo:'PLATO',producto:'WRAP DE RES',score:1.0},
-  {pais:'COL',fecha:'2026-07-14',sede:'GET',tipo:'BEBIDA',producto:'COCTEL VIAJERO',score:1.0},
-  {pais:'COL',fecha:'2026-07-14',sede:'GET',tipo:'PLATO',producto:'HAMBURGUESA VIAJERO',score:1.0},
+  {pais:'COL',fecha:'2026-07-14',sede:'CTG',tipo:'PLATO',producto:'WRAP DE RES',score:1},
+  {pais:'COL',fecha:'2026-07-14',sede:'GET',tipo:'BEBIDA',producto:'COCTEL VIAJERO',score:1},
+  {pais:'COL',fecha:'2026-07-14',sede:'GET',tipo:'PLATO',producto:'HAMBURGUESA VIAJERO',score:1},
   {pais:'COL',fecha:'2026-07-10',sede:'GTP',tipo:'BEBIDA',producto:'COCTEL MARGARITA',score:0.75},
-  {pais:'COL',fecha:'2026-07-11',sede:'SAL',tipo:'PLATO',producto:'LASAGNA BOLOGNESA',score:1.0},
+  {pais:'COL',fecha:'2026-07-11',sede:'SAL',tipo:'PLATO',producto:'LASAGNA BOLOGNESA',score:1},
   {pais:'COL',fecha:'2026-07-14',sede:'SAL',tipo:'BEBIDA',producto:'COCTEL VIAJERO',score:0.925},
   {pais:'COL',fecha:'2026-07-14',sede:'SMR',tipo:'PLATO',producto:'ARROZ RODADERO',score:0.922},
   {pais:'COL',fecha:'2026-07-15',sede:'SMR',tipo:'BEBIDA',producto:'COCTEL VIAJERO',score:0.85},
   {pais:'COL',fecha:'2026-07-10',sede:'TAY',tipo:'PLATO',producto:'CEVICHE DE PESCADO',score:0.8454},
-  {pais:'COL',fecha:'2026-07-14',sede:'TAY',tipo:'BEBIDA',producto:'COCTEL VIAJERO',score:1.0}
+  {pais:'COL',fecha:'2026-07-14',sede:'TAY',tipo:'BEBIDA',producto:'COCTEL VIAJERO',score:1},
+  {pais:'COL',fecha:'2026-07-16',sede:'GTP',tipo:'PLATO',producto:'BOWL VEGETARIANO',score:0.902}
 ];
 
 const googleRaw=[
@@ -2062,7 +2063,14 @@ const googleRaw=[
   {fecha:'2026-07-10',pais:'COL',sede:'GTP',anio:2026,mes:'JULIO',score:4.9,mentions:405},
   {fecha:'2026-07-10',pais:'COL',sede:'BOG',anio:2026,mes:'JULIO',score:4.9,mentions:796},
   {fecha:'2026-07-10',pais:'COL',sede:'MDE',anio:2026,mes:'JULIO',score:4.8,mentions:600},
-  {fecha:'2026-07-10',pais:'COL',sede:'SAL',anio:2026,mes:'JULIO',score:4.8,mentions:617}
+  {fecha:'2026-07-10',pais:'COL',sede:'SAL',anio:2026,mes:'JULIO',score:4.8,mentions:617},
+  {fecha:'2026-07-17',pais:'COL',sede:'GET',anio:2026,mes:'JULIO',score:5,mentions:140},
+  {fecha:'2026-07-17',pais:'COL',sede:'CTG',anio:2026,mes:'JULIO',score:4.9,mentions:124},
+  {fecha:'2026-07-17',pais:'COL',sede:'SMR',anio:2026,mes:'JULIO',score:4.9,mentions:838},
+  {fecha:'2026-07-17',pais:'COL',sede:'GTP',anio:2026,mes:'JULIO',score:4.9,mentions:406},
+  {fecha:'2026-07-17',pais:'COL',sede:'BOG',anio:2026,mes:'JULIO',score:4.9,mentions:796},
+  {fecha:'2026-07-17',pais:'COL',sede:'MDE',anio:2026,mes:'JULIO',score:4.8,mentions:602},
+  {fecha:'2026-07-17',pais:'COL',sede:'SAL',anio:2026,mes:'JULIO',score:4.8,mentions:618}
 ];
 
 const googleSedes=[...new Set(googleRaw.map(r=>r.sede))].sort();
