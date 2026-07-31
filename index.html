@@ -600,10 +600,13 @@ select:focus { border-color: #e8390e; box-shadow: 0 0 0 3px rgba(232,57,14,0.12)
         <div style="position:relative;height:240px"><canvas id="googleMenLineChart"></canvas></div>
       </div>
 
-      <!-- TABLA DETALLE -->
+      <!-- DETALLE POR SEDE Y MES -->
       <div class="card">
         <div class="chart-title" style="margin-bottom:14px">Detalle por sede y mes</div>
-        <div id="googleTable"></div>
+        <div class="tabs" id="googleTabsWrap" style="margin-bottom:14px"></div>
+        <div class="legend" id="legGoogleDetail"></div>
+        <div style="position:relative;height:280px"><canvas id="googleDetailChart"></canvas></div>
+        <p class="chart-sub">Score (línea verde) vs meta 4.8 (línea punteada) · barras: menciones reportadas por fecha</p>
       </div>
 
     </div><!-- end pageGoogle -->
@@ -2079,12 +2082,20 @@ const googleRaw=[
   {fecha:'2026-07-24',pais:'COL',sede:'GTP',anio:2026,mes:'JULIO',score:4.9,mentions:425},
   {fecha:'2026-07-24',pais:'COL',sede:'BOG',anio:2026,mes:'JULIO',score:4.9,mentions:796},
   {fecha:'2026-07-24',pais:'COL',sede:'MDE',anio:2026,mes:'JULIO',score:4.8,mentions:602},
-  {fecha:'2026-07-24',pais:'COL',sede:'SAL',anio:2026,mes:'JULIO',score:4.8,mentions:619}
+  {fecha:'2026-07-24',pais:'COL',sede:'SAL',anio:2026,mes:'JULIO',score:4.8,mentions:619},
+  {fecha:'2026-07-31',pais:'COL',sede:'GET',anio:2026,mes:'JULIO',score:5,mentions:159},
+  {fecha:'2026-07-31',pais:'COL',sede:'CTG',anio:2026,mes:'JULIO',score:4.9,mentions:125},
+  {fecha:'2026-07-31',pais:'COL',sede:'SMR',anio:2026,mes:'JULIO',score:4.9,mentions:839},
+  {fecha:'2026-07-31',pais:'COL',sede:'GTP',anio:2026,mes:'JULIO',score:4.9,mentions:441},
+  {fecha:'2026-07-31',pais:'COL',sede:'BOG',anio:2026,mes:'JULIO',score:4.9,mentions:796},
+  {fecha:'2026-07-31',pais:'COL',sede:'MDE',anio:2026,mes:'JULIO',score:4.8,mentions:603},
+  {fecha:'2026-07-31',pais:'COL',sede:'SAL',anio:2026,mes:'JULIO',score:4.8,mentions:630}
 ];
 
 const googleSedes=[...new Set(googleRaw.map(r=>r.sede))].sort();
 const googleMeses=[...new Set(googleRaw.map(r=>r.mes))];
-let googleBarCI,googleLineCI,googleMenBarCI,googleMenLineCI;
+let googleBarCI,googleLineCI,googleMenBarCI,googleMenLineCI,googleDetailCI;
+let selGoogle=googleSedes[0];
 
 function fGoogle(){
   const{pais,anio}=getF();
@@ -2113,91 +2124,106 @@ function buildGoogle(){
   if(googleBarCI)googleBarCI.destroy();
   googleBarCI=new Chart(document.getElementById('googleBarChart'),{type:'bar',data:{labels:visS,datasets:[{label:'Puntuación',data:barData,backgroundColor:'#e8390ebb',borderColor:'#e8390e',borderWidth:1,borderRadius:4}]},options:{...base,scales:{x:{...base.scales.x},y:{...base.scales.y,min:4,max:5,ticks:{...tk,callback:v=>v.toFixed(1)}}}}});
 
-  // ── LINE: evolución puntuación por fecha (una línea por sede) ──
-  const availF=[...new Set(d.map(r=>r.fecha))].sort();
-  const lineLabels=availF;
-  const lineDs=visS.map((s,i)=>({label:s,data:availF.map(fe=>{const r=d.find(x=>x.sede===s&&x.fecha===fe);return r?r.score:null;}),borderColor:gabSedeColors[i%gabSedeColors.length],backgroundColor:gabSedeColors[i%gabSedeColors.length]+'22',tension:0.4,pointRadius:4,pointBackgroundColor:gabSedeColors[i%gabSedeColors.length],borderWidth:2}));
+  // ── LINE: evolución mensual de puntuación (promedio por mes, una línea por sede) ──
+  const availM=[...new Set(d.map(r=>r.mes))].sort((a,b)=>meses.indexOf(a)-meses.indexOf(b));
+  const lineLabels=availM.map(m=>m.charAt(0)+m.slice(1).toLowerCase());
+  const lineDs=visS.map((s,i)=>({label:s,data:availM.map(m=>{const rows=d.filter(r=>r.sede===s&&r.mes===m);return rows.length?parseFloat((rows.reduce((a,r)=>a+r.score,0)/rows.length).toFixed(2)):null;}),borderColor:gabSedeColors[i%gabSedeColors.length],backgroundColor:gabSedeColors[i%gabSedeColors.length]+'22',tension:0.4,pointRadius:4,pointBackgroundColor:gabSedeColors[i%gabSedeColors.length],borderWidth:2}));
   document.getElementById('legGoogleLine').innerHTML=visS.map((s,i)=>`<span><span class="legend-dot" style="background:${gabSedeColors[i%gabSedeColors.length]}"></span>${s}</span>`).join('');
   if(googleLineCI)googleLineCI.destroy();
   googleLineCI=new Chart(document.getElementById('googleLineChart'),{type:'line',data:{labels:lineLabels,datasets:lineDs},options:{...base,scales:{x:{...base.scales.x},y:{...base.scales.y,min:4,max:5,ticks:{...tk,callback:v=>v.toFixed(1)}}}}});
 
-  // ── LINE: evolución menciones por fecha (una línea por sede) ──
-  const menLineDs=visS.map((s,i)=>({label:s,data:availF.map(fe=>{const r=d.find(x=>x.sede===s&&x.fecha===fe);return r?r.mentions:null;}),borderColor:gabSedeColors[i%gabSedeColors.length],backgroundColor:gabSedeColors[i%gabSedeColors.length]+'18',tension:0.4,pointRadius:4,pointBackgroundColor:gabSedeColors[i%gabSedeColors.length],borderWidth:2}));
+  // ── LINE: evolución de menciones mes a mes (promedio por mes, una línea por sede) ──
+  const menLineDs=visS.map((s,i)=>({label:s,data:availM.map(m=>{const rows=d.filter(r=>r.sede===s&&r.mes===m);return rows.length?parseFloat((rows.reduce((a,r)=>a+r.mentions,0)/rows.length).toFixed(1)):null;}),borderColor:gabSedeColors[i%gabSedeColors.length],backgroundColor:gabSedeColors[i%gabSedeColors.length]+'18',tension:0.4,pointRadius:4,pointBackgroundColor:gabSedeColors[i%gabSedeColors.length],borderWidth:2}));
   document.getElementById('legGoogleMenLine').innerHTML=visS.map((s,i)=>`<span><span class="legend-dot" style="background:${gabSedeColors[i%gabSedeColors.length]}"></span>${s}</span>`).join('');
   if(googleMenLineCI)googleMenLineCI.destroy();
   googleMenLineCI=new Chart(document.getElementById('googleMenLineChart'),{type:'line',data:{labels:lineLabels,datasets:menLineDs},options:{...base,scales:{x:{...base.scales.x},y:{...base.scales.y,beginAtZero:true}}}});
 
-  // ── TABLA por FECHA ──
-  const tableFechas=[...new Set(d.map(r=>r.fecha))].sort();
-
-  function semaforo(val, prev, isScore){
-    if(prev===null||prev===undefined) return '';
-    const delta=val-prev;
-    const isUp=delta>0, isFlat=delta===0;
-    const color=isUp?'#16a34a':isFlat?'#f59e0b':'#dc2626';
-    const arrow=isUp?'▲':isFlat?'●':'▼';
-    const fmt=isScore?Math.abs(delta).toFixed(2):Math.abs(Math.round(delta));
-    const label=isFlat?'sin cambio':`${arrow} ${fmt}`;
-    return `<span style="font-size:10px;font-weight:600;color:${color};display:block;margin-top:2px">${label}</span>`;
-  }
-
-  let th=`<thead>
-    <tr>
-      <th rowspan="2" style="text-align:left;padding:10px 12px;font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;border-bottom:2px solid #e2e8f0;background:#f8fafc;min-width:60px">Sede</th>
-      ${tableFechas.map(fe=>`<th colspan="2" style="text-align:center;padding:8px 12px;font-size:11px;color:#1e293b;font-weight:700;letter-spacing:0.04em;border-bottom:1px solid #e2e8f0;border-left:2px solid #e2e8f0;background:#f8fafc">${fe}</th>`).join('')}
-    </tr>
-    <tr>
-      ${tableFechas.map(()=>`
-        <th style="text-align:center;padding:5px 10px;font-size:10px;color:#6366f1;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;border-bottom:2px solid #e2e8f0;border-left:2px solid #e2e8f0;background:#f8fafc;white-space:nowrap">Score</th>
-        <th style="text-align:center;padding:5px 10px;font-size:10px;color:#0ea5e9;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;border-bottom:2px solid #e2e8f0;background:#f8fafc;white-space:nowrap">Menciones</th>
-      `).join('')}
-    </tr>
-  </thead>`;
-
-  let rows='';
-  visS.forEach((s,si)=>{
-    const bg=si%2===0?'#f8fafc':'#fff';
-    let tr=`<tr style="background:${bg}">
-      <td style="padding:10px 12px;font-size:13px;font-weight:700;color:#1e293b;border-bottom:1px solid #f1f5f9;white-space:nowrap">${s}</td>`;
-    tableFechas.forEach((fe,fi)=>{
-      const r=d.find(x=>x.sede===s&&x.fecha===fe);
-      const prev=fi>0?d.find(x=>x.sede===s&&x.fecha===tableFechas[fi-1]):null;
-      if(r){
-        const scoreDelta=semaforo(r.score,prev?.score,true);
-        const menDelta=semaforo(r.mentions,prev?.mentions,false);
-        tr+=`
-          <td style="text-align:center;padding:10px 10px;border-bottom:1px solid #f1f5f9;border-left:2px solid #e2e8f0;background:${bg}">
-            <span style="font-size:15px;font-weight:700;color:#4f46e5">${r.score.toFixed(1)}</span>
-            ${scoreDelta}
-          </td>
-          <td style="text-align:center;padding:10px 10px;border-bottom:1px solid #f1f5f9;background:${bg}">
-            <span style="font-size:15px;font-weight:700;color:#0284c7">${r.mentions.toLocaleString()}</span>
-            ${menDelta}
-          </td>`;
-      } else {
-        tr+=`
-          <td style="text-align:center;padding:10px 10px;font-size:13px;color:#cbd5e1;border-bottom:1px solid #f1f5f9;border-left:2px solid #e2e8f0">—</td>
-          <td style="text-align:center;padding:10px 10px;font-size:13px;color:#cbd5e1;border-bottom:1px solid #f1f5f9">—</td>`;
-      }
-    });
-    tr+=`</tr>`;
-    rows+=tr;
-  });
-
-  const legend=`<div style="display:flex;gap:16px;align-items:center;padding:10px 12px;background:#f8fafc;border-top:1px solid #e2e8f0;font-size:11px;color:#64748b;flex-wrap:wrap">
-    <span style="font-weight:600;color:#475569">Semáforo:</span>
-    <span style="color:#16a34a;font-weight:600">▲ Subió</span>
-    <span style="color:#f59e0b;font-weight:600">● Sin cambio</span>
-    <span style="color:#dc2626;font-weight:600">▼ Bajó</span>
-    <span style="margin-left:8px;color:#94a3b8">· el número indica cuánto cambió vs la fecha anterior</span>
-  </div>`;
-
-  document.getElementById('googleTable').innerHTML=`
-    <div style="overflow-x:auto;border-radius:10px;border:1px solid #e2e8f0">
-      <table style="width:100%;border-collapse:collapse">${th}<tbody>${rows}</tbody></table>
-      ${legend}
-    </div>`;
+  // ── DETALLE POR SEDE Y MES: gráfica combinada (score vs meta + menciones) ──
+  buildGoogleDetail();
 }
+
+function buildGoogleDetail(){
+  const{pais,anio,sede}=getF();
+  const baseF=googleRaw.filter(r=>(pais==='ALL'||r.pais===pais)&&(anio==='ALL'||r.anio==anio));
+  const visSedesDetail=[...new Set(baseF.map(r=>r.sede))].sort();
+
+  // tabs de sede (patrón igual a gabTabsWrap/sedeTabsWrap)
+  document.getElementById('googleTabsWrap').innerHTML=sede==='ALL'?visSedesDetail.map(s=>`<button class="tab${s===selGoogle||(visSedesDetail.length===1)?' active':''}" onclick="setGoogle('${s}')">${s}</button>`).join(''):(visSedesDetail.includes(sede)?`<button class="tab active">${sede}</button>`:'');
+  const sf=sede!=='ALL'?sede:(visSedesDetail.includes(selGoogle)?selGoogle:visSedesDetail[0]);
+
+  const sdFilt=baseF.filter(r=>r.sede===sf).sort((a,b)=>a.fecha.localeCompare(b.fecha));
+  const labels=sdFilt.map(r=>r.fecha);
+  const scoreData=sdFilt.map(r=>r.score);
+  const metaData=sdFilt.map(()=>4.8);
+  const menData=sdFilt.map(r=>r.mentions);
+
+  document.getElementById('legGoogleDetail').innerHTML=sf?`
+    <span><span class="legend-dot" style="background:#16a34a"></span>Score ${sf}</span>
+    <span><span class="legend-dot" style="background:#dc2626"></span>Meta (4.8)</span>
+    <span><span class="legend-dot" style="background:#0ea5e9"></span>Menciones</span>
+  `:'';
+
+  const detailDataLabels={
+    id:'detailDataLabels',
+    afterDatasetsDraw(chart){
+      const{ctx}=chart;
+      chart.data.datasets.forEach((dataset,i)=>{
+        const meta=chart.getDatasetMeta(i);
+        if(meta.hidden)return;
+        if(dataset.label==='Menciones'){
+          meta.data.forEach((bar,idx)=>{
+            const v=dataset.data[idx];
+            if(v===null||v===undefined)return;
+            ctx.save();
+            ctx.fillStyle='#0c4a6e';
+            ctx.font="700 11px 'Inter', sans-serif";
+            ctx.textAlign='center';
+            ctx.textBaseline='middle';
+            const cy=(bar.y+bar.base)/2;
+            ctx.fillText(v.toLocaleString(),bar.x,cy);
+            ctx.restore();
+          });
+        }
+        if(dataset.label==='Score'){
+          meta.data.forEach((point,idx)=>{
+            const v=dataset.data[idx];
+            if(v===null||v===undefined)return;
+            ctx.save();
+            ctx.fillStyle='#16a34a';
+            ctx.font="700 11px 'Inter', sans-serif";
+            ctx.textAlign='center';
+            ctx.fillText(v.toFixed(1),point.x,point.y-12);
+            ctx.restore();
+          });
+        }
+      });
+    }
+  };
+
+  if(googleDetailCI)googleDetailCI.destroy();
+  googleDetailCI=new Chart(document.getElementById('googleDetailChart'),{
+    data:{
+      labels,
+      datasets:[
+        {type:'line',label:'Score',data:scoreData,borderColor:'#16a34a',backgroundColor:'#16a34a22',tension:0.4,pointRadius:5,pointBackgroundColor:'#16a34a',borderWidth:2,yAxisID:'y'},
+        {type:'line',label:'Meta (4.8)',data:metaData,borderColor:'#dc2626',borderDash:[6,4],pointRadius:0,borderWidth:2,yAxisID:'y'},
+        {type:'bar',label:'Menciones',data:menData,backgroundColor:'#0ea5e93a',borderColor:'#0ea5e9',borderWidth:1,borderRadius:4,yAxisID:'y1'}
+      ]
+    },
+    plugins:[detailDataLabels],
+    options:{
+      ...base,
+      layout:{padding:{top:24}},
+      scales:{
+        x:{...base.scales.x},
+        y:{...base.scales.y,min:4,max:5,ticks:{...tk,callback:v=>v.toFixed(1)},position:'left'},
+        y1:{grid:{display:false},ticks:tk,position:'right',beginAtZero:true}
+      }
+    }
+  });
+}
+
+window.setGoogle=s=>{selGoogle=s;buildGoogleDetail();};
 
 window.setSede=s=>{selSede=s;buildSedeTabs();buildLine();};
 window.setGab=s=>{selGab=s;buildSedeTabs();buildGab();};
