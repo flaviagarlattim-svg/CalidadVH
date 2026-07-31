@@ -606,7 +606,7 @@ select:focus { border-color: #e8390e; box-shadow: 0 0 0 3px rgba(232,57,14,0.12)
         <div class="tabs" id="googleTabsWrap" style="margin-bottom:14px"></div>
         <div class="legend" id="legGoogleDetail"></div>
         <div style="position:relative;height:280px"><canvas id="googleDetailChart"></canvas></div>
-        <p class="chart-sub">Score (línea verde) vs meta 4.8 (línea punteada) · barras: menciones reportadas por fecha</p>
+        <p class="chart-sub">Score (línea verde) vs meta 4.8 (línea roja punteada) · barras: menciones reportadas por fecha, con indicador ▲/●/▼ vs la fecha anterior</p>
       </div>
 
     </div><!-- end pageGoogle -->
@@ -2182,6 +2182,23 @@ function buildGoogleDetail(){
             const cy=(bar.y+bar.base)/2;
             ctx.fillText(v.toLocaleString(),bar.x,cy);
             ctx.restore();
+
+            // indicador vs fecha anterior
+            const prev=idx>0?dataset.data[idx-1]:null;
+            if(prev!==null&&prev!==undefined){
+              const delta=v-prev;
+              const isUp=delta>0, isFlat=delta===0;
+              const color=isUp?'#16a34a':isFlat?'#f59e0b':'#dc2626';
+              const arrow=isUp?'▲':isFlat?'●':'▼';
+              const label=isFlat?'●  igual':`${arrow}  ${Math.abs(delta).toLocaleString()}`;
+              ctx.save();
+              ctx.fillStyle=color;
+              ctx.font="700 10px 'Inter', sans-serif";
+              ctx.textAlign='center';
+              ctx.textBaseline='middle';
+              ctx.fillText(label,bar.x,cy+14);
+              ctx.restore();
+            }
           });
         }
         if(dataset.label==='Score'){
