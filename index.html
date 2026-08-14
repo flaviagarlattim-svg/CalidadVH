@@ -389,6 +389,7 @@ select:focus { border-color: #e8390e; box-shadow: 0 0 0 3px rgba(232,57,14,0.12)
           <option value="Calidad bebidas">Calidad bebidas</option>
           <option value="Calidad comida">Calidad comida</option>
           <option value="Servicio">Servicio</option>
+          <option value="General A&B">General A&B</option>
         </select>
       </div>
       <div class="filter-group" style="margin-bottom:12px">
@@ -739,7 +740,7 @@ const raw=[
   {pais:'COL',sede:'SAL',anio:2026,mes:'FEBRERO',cat:'Servicio',score:92.22},
   {pais:'COL',sede:'SMR',anio:2026,mes:'FEBRERO',cat:'Servicio',score:91.88},
   {pais:'COL',sede:'TAY',anio:2026,mes:'FEBRERO',cat:'Servicio',score:84.34},
-  {pais:'COL',sede:'BOG',anio:2026,mes:'MARZO',cat:'Calidad bebidas',score:80.0},
+  {pais:'COL',sede:'BOG',anio:2026,mes:'MARZO',cat:'Calidad bebidas',score:80},
   {pais:'COL',sede:'CLO',anio:2026,mes:'MARZO',cat:'Calidad bebidas',score:78.52},
   {pais:'COL',sede:'CTG',anio:2026,mes:'MARZO',cat:'Calidad bebidas',score:92.31},
   {pais:'COL',sede:'GET',anio:2026,mes:'MARZO',cat:'Calidad bebidas',score:86.32},
@@ -772,7 +773,7 @@ const raw=[
   {pais:'COL',sede:'CLO',anio:2025,mes:'ABRIL',cat:'Calidad comida',score:92.59},
   {pais:'COL',sede:'CLO',anio:2025,mes:'MAYO',cat:'Calidad comida',score:88.89},
   {pais:'COL',sede:'CLO',anio:2025,mes:'JUNIO',cat:'Calidad comida',score:92.59},
-  {pais:'COL',sede:'CLO',anio:2025,mes:'JULIO',cat:'Calidad comida',score:90.0},
+  {pais:'COL',sede:'CLO',anio:2025,mes:'JULIO',cat:'Calidad comida',score:90},
   {pais:'COL',sede:'CLO',anio:2025,mes:'AGOSTO',cat:'Calidad comida',score:90.48},
   {pais:'COL',sede:'CLO',anio:2025,mes:'SEPTIEMBRE',cat:'Calidad comida',score:86.11},
   {pais:'COL',sede:'CLO',anio:2025,mes:'OCTUBRE',cat:'Calidad comida',score:96.83},
@@ -789,7 +790,7 @@ const raw=[
   {pais:'COL',sede:'CLO',anio:2025,mes:'SEPTIEMBRE',cat:'Calidad bebidas',score:93.06},
   {pais:'COL',sede:'CLO',anio:2025,mes:'OCTUBRE',cat:'Calidad bebidas',score:95.24},
   {pais:'COL',sede:'CLO',anio:2025,mes:'NOVIEMBRE',cat:'Calidad bebidas',score:81.48},
-  {pais:'COL',sede:'CLO',anio:2025,mes:'DICIEMBRE',cat:'Calidad bebidas',score:100.0},
+  {pais:'COL',sede:'CLO',anio:2025,mes:'DICIEMBRE',cat:'Calidad bebidas',score:100},
   {pais:'COL',sede:'CLO',anio:2025,mes:'ENERO',cat:'Servicio',score:91.92},
   {pais:'COL',sede:'CLO',anio:2025,mes:'FEBRERO',cat:'Servicio',score:81.48},
   {pais:'COL',sede:'CLO',anio:2025,mes:'MARZO',cat:'Servicio',score:81.94},
@@ -801,7 +802,7 @@ const raw=[
   {pais:'COL',sede:'CLO',anio:2025,mes:'SEPTIEMBRE',cat:'Servicio',score:94.44},
   {pais:'COL',sede:'CLO',anio:2025,mes:'OCTUBRE',cat:'Servicio',score:95.24},
   {pais:'COL',sede:'CLO',anio:2025,mes:'NOVIEMBRE',cat:'Servicio',score:92.59},
-  {pais:'COL',sede:'CLO',anio:2025,mes:'DICIEMBRE',cat:'Servicio',score:100.0},
+  {pais:'COL',sede:'CLO',anio:2025,mes:'DICIEMBRE',cat:'Servicio',score:100},
   {pais:'COL',sede:'BOG',anio:2026,mes:'MAYO',cat:'Calidad bebidas',score:77.04},
   {pais:'COL',sede:'BOG',anio:2026,mes:'MAYO',cat:'Calidad comida',score:77.04},
   {pais:'COL',sede:'BOG',anio:2026,mes:'MAYO',cat:'Servicio',score:83.33},
@@ -813,7 +814,7 @@ const raw=[
   {pais:'COL',sede:'CTG',anio:2026,mes:'MAYO',cat:'Servicio',score:94.44},
   {pais:'COL',sede:'GET',anio:2026,mes:'MAYO',cat:'Calidad bebidas',score:82.13},
   {pais:'COL',sede:'GET',anio:2026,mes:'MAYO',cat:'Calidad comida',score:81.78},
-  {pais:'COL',sede:'GET',anio:2026,mes:'MAYO',cat:'Servicio',score:84.0},
+  {pais:'COL',sede:'GET',anio:2026,mes:'MAYO',cat:'Servicio',score:84},
   {pais:'COL',sede:'GTP',anio:2026,mes:'MAYO',cat:'Calidad bebidas',score:77.49},
   {pais:'COL',sede:'GTP',anio:2026,mes:'MAYO',cat:'Calidad comida',score:78.63},
   {pais:'COL',sede:'GTP',anio:2026,mes:'MAYO',cat:'Servicio',score:79.82},
@@ -865,7 +866,7 @@ const raw=[
   {pais:'MX',sede:'CDMX',anio:2026,mes:'ENERO',cat:'Calidad comida',score:86.42},
   {pais:'MX',sede:'CDMX',anio:2026,mes:'ENERO',cat:'Calidad bebidas',score:85.19},
   {pais:'MX',sede:'CDMX',anio:2026,mes:'ENERO',cat:'Servicio',score:91.36},
-  {pais:'MX',sede:'CDMX',anio:2026,mes:'FEBRERO',cat:'Calidad comida',score:80.0},
+  {pais:'MX',sede:'CDMX',anio:2026,mes:'FEBRERO',cat:'Calidad comida',score:80},
   {pais:'MX',sede:'CDMX',anio:2026,mes:'FEBRERO',cat:'Calidad bebidas',score:92.59},
   {pais:'MX',sede:'CDMX',anio:2026,mes:'FEBRERO',cat:'Servicio',score:94.44},
   {pais:'MX',sede:'CDMX',anio:2026,mes:'MARZO',cat:'Calidad comida',score:88.89},
@@ -881,7 +882,7 @@ const raw=[
   {pais:'MX',sede:'CDMX',anio:2026,mes:'JUNIO',cat:'Calidad bebidas',score:77.78},
   {pais:'MX',sede:'CDMX',anio:2026,mes:'JUNIO',cat:'Servicio',score:90.6},
   {pais:'MX',sede:'SAYU',anio:2026,mes:'ENERO',cat:'Calidad comida',score:95.56},
-  {pais:'MX',sede:'SAYU',anio:2026,mes:'ENERO',cat:'Calidad bebidas',score:100.0},
+  {pais:'MX',sede:'SAYU',anio:2026,mes:'ENERO',cat:'Calidad bebidas',score:100},
   {pais:'MX',sede:'SAYU',anio:2026,mes:'ENERO',cat:'Servicio',score:97.78},
   {pais:'MX',sede:'SAYU',anio:2026,mes:'FEBRERO',cat:'Calidad comida',score:84.13},
   {pais:'MX',sede:'SAYU',anio:2026,mes:'FEBRERO',cat:'Calidad bebidas',score:85.56},
@@ -894,9 +895,9 @@ const raw=[
   {pais:'MX',sede:'SAYU',anio:2026,mes:'ABRIL',cat:'Servicio',score:83.33},
   {pais:'MX',sede:'SAYU',anio:2026,mes:'MAYO',cat:'Calidad comida',score:94.02},
   {pais:'MX',sede:'SAYU',anio:2026,mes:'MAYO',cat:'Calidad bebidas',score:97.62},
-  {pais:'MX',sede:'SAYU',anio:2026,mes:'MAYO',cat:'Servicio',score:100.0},
+  {pais:'MX',sede:'SAYU',anio:2026,mes:'MAYO',cat:'Servicio',score:100},
   {pais:'MX',sede:'SAYU',anio:2026,mes:'JUNIO',cat:'Calidad comida',score:94.44},
-  {pais:'MX',sede:'SAYU',anio:2026,mes:'JUNIO',cat:'Calidad bebidas',score:100.0},
+  {pais:'MX',sede:'SAYU',anio:2026,mes:'JUNIO',cat:'Calidad bebidas',score:100},
   {pais:'MX',sede:'SAYU',anio:2026,mes:'JUNIO',cat:'Servicio',score:98.41},
   {pais:'MX',sede:'OAX',anio:2026,mes:'ENERO',cat:'Calidad comida',score:85.19},
   {pais:'MX',sede:'OAX',anio:2026,mes:'ENERO',cat:'Calidad bebidas',score:85.19},
@@ -911,11 +912,11 @@ const raw=[
   {pais:'MX',sede:'OAX',anio:2026,mes:'MAYO',cat:'Calidad bebidas',score:84.44},
   {pais:'MX',sede:'OAX',anio:2026,mes:'MAYO',cat:'Servicio',score:84.85},
   {pais:'MX',sede:'OAX',anio:2026,mes:'JUNIO',cat:'Calidad comida',score:94.44},
-  {pais:'MX',sede:'OAX',anio:2026,mes:'JUNIO',cat:'Calidad bebidas',score:100.0},
-  {pais:'MX',sede:'OAX',anio:2026,mes:'JUNIO',cat:'Servicio',score:100.0},
-  {pais:'MX',sede:'PXM',anio:2026,mes:'ENERO',cat:'Calidad comida',score:100.0},
-  {pais:'MX',sede:'PXM',anio:2026,mes:'ENERO',cat:'Calidad bebidas',score:100.0},
-  {pais:'MX',sede:'PXM',anio:2026,mes:'ENERO',cat:'Servicio',score:100.0},
+  {pais:'MX',sede:'OAX',anio:2026,mes:'JUNIO',cat:'Calidad bebidas',score:100},
+  {pais:'MX',sede:'OAX',anio:2026,mes:'JUNIO',cat:'Servicio',score:100},
+  {pais:'MX',sede:'PXM',anio:2026,mes:'ENERO',cat:'Calidad comida',score:100},
+  {pais:'MX',sede:'PXM',anio:2026,mes:'ENERO',cat:'Calidad bebidas',score:100},
+  {pais:'MX',sede:'PXM',anio:2026,mes:'ENERO',cat:'Servicio',score:100},
   {pais:'MX',sede:'PXM',anio:2026,mes:'FEBRERO',cat:'Calidad comida',score:90.28},
   {pais:'MX',sede:'PXM',anio:2026,mes:'FEBRERO',cat:'Calidad bebidas',score:88.89},
   {pais:'MX',sede:'PXM',anio:2026,mes:'FEBRERO',cat:'Servicio',score:90.28},
@@ -956,7 +957,7 @@ const raw=[
   {pais:'PTY',sede:'CASCO',anio:2026,mes:'JUNIO',cat:'Servicio',score:89.21},
   {pais:'CR',sede:'SJO',anio:2026,mes:'ENERO',cat:'Calidad comida',score:77.78},
   {pais:'CR',sede:'SJO',anio:2026,mes:'ENERO',cat:'Servicio',score:77.78},
-  {pais:'CR',sede:'SJO',anio:2026,mes:'FEBRERO',cat:'Calidad comida',score:80.0},
+  {pais:'CR',sede:'SJO',anio:2026,mes:'FEBRERO',cat:'Calidad comida',score:80},
   {pais:'CR',sede:'SJO',anio:2026,mes:'FEBRERO',cat:'Calidad bebidas',score:70.37},
   {pais:'CR',sede:'SJO',anio:2026,mes:'FEBRERO',cat:'Servicio',score:87.04},
   {pais:'CR',sede:'SJO',anio:2026,mes:'MARZO',cat:'Calidad comida',score:90.74},
@@ -973,7 +974,7 @@ const raw=[
   {pais:'CR',sede:'SJO',anio:2026,mes:'JUNIO',cat:'Servicio',score:94.2},
   {pais:'CR',sede:'FON',anio:2026,mes:'ENERO',cat:'Calidad comida',score:77.78},
   {pais:'CR',sede:'FON',anio:2026,mes:'ENERO',cat:'Calidad bebidas',score:77.78},
-  {pais:'CR',sede:'FON',anio:2026,mes:'ENERO',cat:'Servicio',score:100.0},
+  {pais:'CR',sede:'FON',anio:2026,mes:'ENERO',cat:'Servicio',score:100},
   {pais:'CR',sede:'FON',anio:2026,mes:'FEBRERO',cat:'Calidad comida',score:97.22},
   {pais:'CR',sede:'FON',anio:2026,mes:'FEBRERO',cat:'Calidad bebidas',score:97.22},
   {pais:'CR',sede:'FON',anio:2026,mes:'FEBRERO',cat:'Servicio',score:97.22},
@@ -999,7 +1000,7 @@ const raw=[
   {pais:'PER',sede:'BAR',anio:2026,mes:'FEBRERO',cat:'Calidad comida',score:72.22},
   {pais:'PER',sede:'BAR',anio:2026,mes:'MARZO',cat:'Calidad comida',score:79.37},
   {pais:'PER',sede:'BAR',anio:2026,mes:'ABRIL',cat:'Calidad comida',score:84.72},
-  {pais:'PER',sede:'BAR',anio:2026,mes:'MAYO',cat:'Calidad comida',score:90.0},
+  {pais:'PER',sede:'BAR',anio:2026,mes:'MAYO',cat:'Calidad comida',score:90},
   {pais:'PER',sede:'BAR',anio:2026,mes:'JUNIO',cat:'Calidad comida',score:85.93},
   {pais:'PER',sede:'BAR',anio:2026,mes:'ENERO',cat:'Servicio',score:97.78},
   {pais:'PER',sede:'BAR',anio:2026,mes:'FEBRERO',cat:'Servicio',score:76.92},
@@ -1046,7 +1047,7 @@ const raw=[
   {pais:'PER',sede:'BAR',anio:2025,mes:'JULIO',cat:'Calidad bebidas',score:91.11},
   {pais:'PER',sede:'BAR',anio:2025,mes:'AGOSTO',cat:'Calidad bebidas',score:80.34},
   {pais:'PER',sede:'BAR',anio:2025,mes:'SEPTIEMBRE',cat:'Calidad bebidas',score:89.39},
-  {pais:'PER',sede:'BAR',anio:2025,mes:'OCTUBRE',cat:'Calidad bebidas',score:90.0},
+  {pais:'PER',sede:'BAR',anio:2025,mes:'OCTUBRE',cat:'Calidad bebidas',score:90},
   {pais:'PER',sede:'BAR',anio:2025,mes:'NOVIEMBRE',cat:'Calidad bebidas',score:90.85},
   {pais:'PER',sede:'BAR',anio:2025,mes:'DICIEMBRE',cat:'Calidad bebidas',score:92.59},
   {pais:'PER',sede:'BAR',anio:2026,mes:'ENERO',cat:'Calidad bebidas',score:95.24},
@@ -1065,7 +1066,7 @@ const raw=[
   {pais:'PER',sede:'BAR',anio:2026,mes:'FEBRERO',cat:'Calidad comida',score:72.22},
   {pais:'PER',sede:'BAR',anio:2026,mes:'MARZO',cat:'Calidad comida',score:79.37},
   {pais:'PER',sede:'BAR',anio:2026,mes:'ABRIL',cat:'Calidad comida',score:84.72},
-  {pais:'PER',sede:'BAR',anio:2026,mes:'MAYO',cat:'Calidad comida',score:90.0},
+  {pais:'PER',sede:'BAR',anio:2026,mes:'MAYO',cat:'Calidad comida',score:90},
   {pais:'PER',sede:'BAR',anio:2026,mes:'JUNIO',cat:'Calidad comida',score:85.93},
   {pais:'PER',sede:'BAR',anio:2025,mes:'JULIO',cat:'Servicio',score:97.78},
   {pais:'PER',sede:'BAR',anio:2025,mes:'AGOSTO',cat:'Servicio',score:91.98},
@@ -1110,7 +1111,7 @@ const raw=[
   {pais:'PER',sede:'AQP',anio:2025,mes:'NOVIEMBRE',cat:'Servicio',score:91.11},
   {pais:'PER',sede:'AQP',anio:2025,mes:'DICIEMBRE',cat:'Servicio',score:92.59},
   {pais:'PER',sede:'AQP',anio:2026,mes:'ENERO',cat:'Servicio',score:90.48},
-  {pais:'PER',sede:'AQP',anio:2026,mes:'FEBRERO',cat:'Servicio',score:75.0},
+  {pais:'PER',sede:'AQP',anio:2026,mes:'FEBRERO',cat:'Servicio',score:75},
   {pais:'PER',sede:'AQP',anio:2026,mes:'MARZO',cat:'Servicio',score:94.44},
   {pais:'PER',sede:'AQP',anio:2026,mes:'ABRIL',cat:'Servicio',score:88.89},
   {pais:'PER',sede:'AQP',anio:2026,mes:'MAYO',cat:'Servicio',score:94.44},
@@ -1123,18 +1124,18 @@ const raw=[
   {pais:'ARG',sede:'BsAs',anio:2025,mes:'DICIEMBRE',cat:'Calidad bebidas',score:73.74},
   {pais:'ARG',sede:'BsAs',anio:2026,mes:'ENERO',cat:'Calidad bebidas',score:77.78},
   {pais:'ARG',sede:'BsAs',anio:2026,mes:'FEBRERO',cat:'Calidad bebidas',score:74.07},
-  {pais:'ARG',sede:'BsAs',anio:2026,mes:'ABRIL',cat:'Calidad bebidas',score:100.0},
+  {pais:'ARG',sede:'BsAs',anio:2026,mes:'ABRIL',cat:'Calidad bebidas',score:100},
   {pais:'ARG',sede:'BsAs',anio:2026,mes:'MAYO',cat:'Calidad bebidas',score:11.11},
   {pais:'ARG',sede:'BsAs',anio:2026,mes:'JUNIO',cat:'Calidad bebidas',score:85.19},
   {pais:'ARG',sede:'BsAs',anio:2025,mes:'JULIO',cat:'Calidad comida',score:76.98},
   {pais:'ARG',sede:'BsAs',anio:2025,mes:'AGOSTO',cat:'Calidad comida',score:81.82},
   {pais:'ARG',sede:'BsAs',anio:2025,mes:'SEPTIEMBRE',cat:'Calidad comida',score:77.78},
   {pais:'ARG',sede:'BsAs',anio:2025,mes:'OCTUBRE',cat:'Calidad comida',score:85.19},
-  {pais:'ARG',sede:'BsAs',anio:2025,mes:'NOVIEMBRE',cat:'Calidad comida',score:75.0},
+  {pais:'ARG',sede:'BsAs',anio:2025,mes:'NOVIEMBRE',cat:'Calidad comida',score:75},
   {pais:'ARG',sede:'BsAs',anio:2025,mes:'DICIEMBRE',cat:'Calidad comida',score:52.53},
   {pais:'ARG',sede:'BsAs',anio:2026,mes:'ENERO',cat:'Calidad comida',score:68.89},
   {pais:'ARG',sede:'BsAs',anio:2026,mes:'FEBRERO',cat:'Calidad comida',score:66.67},
-  {pais:'ARG',sede:'BsAs',anio:2026,mes:'ABRIL',cat:'Calidad comida',score:100.0},
+  {pais:'ARG',sede:'BsAs',anio:2026,mes:'ABRIL',cat:'Calidad comida',score:100},
   {pais:'ARG',sede:'BsAs',anio:2026,mes:'MAYO',cat:'Calidad comida',score:88.89},
   {pais:'ARG',sede:'BsAs',anio:2026,mes:'JUNIO',cat:'Calidad comida',score:40.74},
   {pais:'ARG',sede:'BsAs',anio:2025,mes:'JULIO',cat:'Servicio',score:88.3},
@@ -1145,7 +1146,7 @@ const raw=[
   {pais:'ARG',sede:'BsAs',anio:2025,mes:'DICIEMBRE',cat:'Servicio',score:86.11},
   {pais:'ARG',sede:'BsAs',anio:2026,mes:'ENERO',cat:'Servicio',score:75.56},
   {pais:'ARG',sede:'BsAs',anio:2026,mes:'FEBRERO',cat:'Servicio',score:85.19},
-  {pais:'ARG',sede:'BsAs',anio:2026,mes:'ABRIL',cat:'Servicio',score:100.0},
+  {pais:'ARG',sede:'BsAs',anio:2026,mes:'ABRIL',cat:'Servicio',score:100},
   {pais:'ARG',sede:'BsAs',anio:2026,mes:'MAYO',cat:'Servicio',score:77.78},
   {pais:'ARG',sede:'BsAs',anio:2026,mes:'JUNIO',cat:'Servicio',score:96.3},
   {pais:'UY',sede:'COL',anio:2026,mes:'ABRIL',cat:'Calidad bebidas',score:81.48},
@@ -1230,7 +1231,17 @@ const raw=[
   {pais:'UY',sede:'MTV',anio:2026,mes:'MAYO',cat:'Calidad comida',score:88.89},
   {pais:'UY',sede:'MTV',anio:2026,mes:'JUNIO',cat:'Calidad comida',score:93.33},
   {pais:'UY',sede:'MTV',anio:2026,mes:'MAYO',cat:'Servicio',score:91.67},
-  {pais:'UY',sede:'MTV',anio:2026,mes:'JUNIO',cat:'Servicio',score:94.44}
+  {pais:'UY',sede:'MTV',anio:2026,mes:'JUNIO',cat:'Servicio',score:94.44},
+  {pais:'COL',sede:'BOG',anio:2026,mes:'JULIO',cat:'General A&B',score:64.81},
+  {pais:'COL',sede:'GET',anio:2026,mes:'JULIO',cat:'General A&B',score:82.03},
+  {pais:'COL',sede:'CTG',anio:2026,mes:'JULIO',cat:'General A&B',score:94.44},
+  {pais:'COL',sede:'MDE',anio:2026,mes:'JULIO',cat:'General A&B',score:87.83},
+  {pais:'COL',sede:'GTP',anio:2026,mes:'JULIO',cat:'General A&B',score:81.67},
+  {pais:'COL',sede:'SAL',anio:2026,mes:'JULIO',cat:'General A&B',score:95.56},
+  {pais:'COL',sede:'SAI',anio:2026,mes:'JULIO',cat:'General A&B',score:82.41},
+  {pais:'COL',sede:'CLO',anio:2026,mes:'JULIO',cat:'General A&B',score:80.25},
+  {pais:'COL',sede:'TAY',anio:2026,mes:'JULIO',cat:'General A&B',score:85.08},
+  {pais:'COL',sede:'SMR',anio:2026,mes:'JULIO',cat:'General A&B',score:86.42}
 ];
 
 const otaRaw=[
@@ -1546,7 +1557,39 @@ const otaRaw=[
   {pais:'CR',sede:'FON',anio:2026,mes:'MAYO',ota:'HOSTELWORLD',score:37,mentions:5},
   {pais:'CR',sede:'FON',anio:2026,mes:'JUNIO',ota:'BOOKING',score:55,mentions:4},
   {pais:'CR',sede:'FON',anio:2026,mes:'JUNIO',ota:'GOOGLE',score:0,mentions:0},
-  {pais:'CR',sede:'FON',anio:2026,mes:'JUNIO',ota:'HOSTELWORLD',score:0,mentions:0}
+  {pais:'CR',sede:'FON',anio:2026,mes:'JUNIO',ota:'HOSTELWORLD',score:0,mentions:0},
+  {pais:'COL',sede:'BOG',anio:2026,mes:'JULIO',ota:'BOOKING',score:67,mentions:7},
+  {pais:'COL',sede:'BOG',anio:2026,mes:'JULIO',ota:'GOOGLE',score:99,mentions:7},
+  {pais:'COL',sede:'BOG',anio:2026,mes:'JULIO',ota:'HOSTELWORLD',score:100,mentions:1},
+  {pais:'COL',sede:'BOG',anio:2026,mes:'JULIO',ota:'PRICELINE',score:100,mentions:2},
+  {pais:'COL',sede:'GET',anio:2026,mes:'JULIO',ota:'BOOKING',score:64,mentions:11},
+  {pais:'COL',sede:'GET',anio:2026,mes:'JULIO',ota:'GOOGLE',score:75,mentions:7},
+  {pais:'COL',sede:'GET',anio:2026,mes:'JULIO',ota:'HOSTELWORLD',score:66,mentions:9},
+  {pais:'COL',sede:'GTP',anio:2026,mes:'JULIO',ota:'HOSTELWORLD',score:64,mentions:3},
+  {pais:'COL',sede:'GTP',anio:2026,mes:'JULIO',ota:'GOOGLE',score:88,mentions:9},
+  {pais:'COL',sede:'CLO',anio:2026,mes:'JULIO',ota:'BOOKING',score:100,mentions:3},
+  {pais:'COL',sede:'CLO',anio:2026,mes:'JULIO',ota:'HOSTELWORLD',score:52,mentions:2},
+  {pais:'COL',sede:'CLO',anio:2026,mes:'JULIO',ota:'BOOKING',score:64,mentions:4},
+  {pais:'COL',sede:'CTG',anio:2026,mes:'JULIO',ota:'BOOKING',score:72,mentions:7},
+  {pais:'COL',sede:'CTG',anio:2026,mes:'JULIO',ota:'GOOGLE',score:90,mentions:3},
+  {pais:'COL',sede:'CTG',anio:2026,mes:'JULIO',ota:'HOSTELWORLD',score:73,mentions:19},
+  {pais:'COL',sede:'CTG',anio:2026,mes:'JULIO',ota:'PRICELINE',score:78,mentions:2},
+  {pais:'COL',sede:'MDE',anio:2026,mes:'JULIO',ota:'BOOKING',score:45,mentions:4},
+  {pais:'COL',sede:'MDE',anio:2026,mes:'JULIO',ota:'GOOGLE',score:100,mentions:1},
+  {pais:'COL',sede:'MDE',anio:2026,mes:'JULIO',ota:'HOSTELWORLD',score:25,mentions:2},
+  {pais:'COL',sede:'MDE',anio:2026,mes:'JULIO',ota:'AGODA',score:70,mentions:1},
+  {pais:'COL',sede:'SAL',anio:2026,mes:'JULIO',ota:'BOOKING',score:87,mentions:3},
+  {pais:'COL',sede:'SAL',anio:2026,mes:'JULIO',ota:'GOOGLE',score:16,mentions:3},
+  {pais:'COL',sede:'SAL',anio:2026,mes:'JULIO',ota:'HOSTELWORLD',score:100,mentions:6},
+  {pais:'COL',sede:'SAL',anio:2026,mes:'JULIO',ota:'PRICELINE',score:81,mentions:4},
+  {pais:'COL',sede:'SAI',anio:2026,mes:'JULIO',ota:'BOOKING',score:61,mentions:10},
+  {pais:'COL',sede:'SAI',anio:2026,mes:'JULIO',ota:'HOSTELWORLD',score:81,mentions:1},
+  {pais:'COL',sede:'TAY',anio:2026,mes:'JULIO',ota:'BOOKING',score:74,mentions:2},
+  {pais:'COL',sede:'TAY',anio:2026,mes:'JULIO',ota:'GOOGLE',score:100,mentions:2},
+  {pais:'COL',sede:'TAY',anio:2026,mes:'JULIO',ota:'PRICELINE',score:33,mentions:1},
+  {pais:'COL',sede:'SMR',anio:2026,mes:'JULIO',ota:'BOOKING',score:56,mentions:6},
+  {pais:'COL',sede:'SMR',anio:2026,mes:'JULIO',ota:'GOOGLE',score:75,mentions:4},
+  {pais:'COL',sede:'SMR',anio:2026,mes:'JULIO',ota:'HOSTELWORLD',score:100,mentions:10}
 ];
 
 const gabRaw=[
@@ -1657,7 +1700,17 @@ const gabRaw=[
   {pais:'CR',sede:'FON',anio:2026,mes:'MARZO',score:68,mentions:38},
   {pais:'CR',sede:'FON',anio:2026,mes:'ABRIL',score:63,mentions:26},
   {pais:'CR',sede:'FON',anio:2026,mes:'MAYO',score:51,mentions:14},
-  {pais:'CR',sede:'FON',anio:2026,mes:'JUNIO',score:55,mentions:4}
+  {pais:'CR',sede:'FON',anio:2026,mes:'JUNIO',score:55,mentions:4},
+  {pais:'COL',sede:'BOG',anio:2026,mes:'JULIO',score:89,mentions:17},
+  {pais:'COL',sede:'GET',anio:2026,mes:'JULIO',score:67,mentions:27},
+  {pais:'COL',sede:'GTP',anio:2026,mes:'JULIO',score:73,mentions:13},
+  {pais:'COL',sede:'CLO',anio:2026,mes:'JULIO',score:83,mentions:9},
+  {pais:'COL',sede:'CTG',anio:2026,mes:'JULIO',score:75,mentions:31},
+  {pais:'COL',sede:'MDE',anio:2026,mes:'JULIO',score:50,mentions:8},
+  {pais:'COL',sede:'SAL',anio:2026,mes:'JULIO',score:78,mentions:16},
+  {pais:'COL',sede:'SAI',anio:2026,mes:'JULIO',score:63,mentions:11},
+  {pais:'COL',sede:'TAY',anio:2026,mes:'JULIO',score:85,mentions:5},
+  {pais:'COL',sede:'SMR',anio:2026,mes:'JULIO',score:84,mentions:20}
 ];
 
 const topicsData=[
@@ -1772,14 +1825,14 @@ const topicsData=[
 
 const meses=['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'];
 const mesLabels=meses.map(m=>m.charAt(0)+m.slice(1).toLowerCase());
-const cats=['Calidad bebidas','Calidad comida','Servicio'];
+const cats=['Calidad bebidas','Calidad comida','Servicio','General A&B'];
 const allSedes=[...new Set(raw.map(r=>r.sede))].sort();
 const gabSedes=[...new Set(gabRaw.map(r=>r.sede))].sort();
 const allPaises=[...new Set([...raw.map(r=>r.pais),...otaRaw.map(r=>r.pais)])].filter(Boolean).sort();
-const catColors={'Calidad bebidas':'#e8390e','Calidad comida':'#0ea5e9','Servicio':'#f43f5e'};
-const catDash={'Calidad bebidas':[6,3],'Calidad comida':[3,2],'Servicio':[]};
-const otaList=['BOOKING','GOOGLE','HOSTELWORLD','TRIPADVISOR','EXPEDIA','PRICELINE'];
-const otaColors={'BOOKING':'#e8390e','GOOGLE':'#0ea5e9','HOSTELWORLD':'#f43f5e','TRIPADVISOR':'#f97316','EXPEDIA':'#8b5cf6','PRICELINE':'#10b981'};
+const catColors={'Calidad bebidas':'#e8390e','Calidad comida':'#0ea5e9','Servicio':'#8b5cf6','General A&B':'#14b8a6'};
+const catDash={'Calidad bebidas':[6,3],'Calidad comida':[3,2],'Servicio':[],'General A&B':[]};
+const otaList=['BOOKING','GOOGLE','HOSTELWORLD','TRIPADVISOR','EXPEDIA','PRICELINE','AGODA'];
+const otaColors={'BOOKING':'#e8390e','GOOGLE':'#0ea5e9','HOSTELWORLD':'#f43f5e','TRIPADVISOR':'#f97316','EXPEDIA':'#8b5cf6','PRICELINE':'#10b981','AGODA':'#eab308'};
 const gabSedeColors=['#e8390e','#0ea5e9','#f43f5e','#f97316','#10b981','#8b5cf6','#ef4444','#06b6d4','#84cc16','#f59e0b'];
 
 function avg(arr){return arr.length?arr.reduce((a,b)=>a+b,0)/arr.length:null;}
@@ -1792,6 +1845,7 @@ let selSede=allSedes[0], selGab=gabSedes[0];
 
 function getF(){return{pais:document.getElementById('paisFilter').value,anio:document.getElementById('anioFilter').value,mes:document.getElementById('mesFilter').value,cat:document.getElementById('catFilter').value,sede:document.getElementById('sedeFilter').value};}
 function fRaw(){const{pais,anio,mes,cat,sede}=getF();return raw.filter(r=>(pais==='ALL'||r.pais===pais)&&(anio==='ALL'||r.anio==anio)&&(mes==='ALL'||r.mes===mes)&&(cat==='ALL'||r.cat===cat)&&(sede==='ALL'||r.sede===sede));}
+function fRawNoCat(){const{pais,anio,mes,sede}=getF();return raw.filter(r=>(pais==='ALL'||r.pais===pais)&&(anio==='ALL'||r.anio==anio)&&(mes==='ALL'||r.mes===mes)&&(sede==='ALL'||r.sede===sede));}
 function fOta(){const{pais,anio,mes,sede}=getF();return otaRaw.filter(r=>(pais==='ALL'||r.pais===pais)&&(anio==='ALL'||r.anio==anio)&&(mes==='ALL'||r.mes===mes)&&(sede==='ALL'||r.sede===sede));}
 function fGab(){const{pais,anio,mes,sede}=getF();return gabRaw.filter(r=>(pais==='ALL'||r.pais===pais)&&(anio==='ALL'||r.anio==anio)&&(mes==='ALL'||r.mes===mes)&&(sede==='ALL'||r.sede===sede));}
 function visSedes(){const{pais,sede}=getF();if(sede!=='ALL')return[sede];if(pais==='ALL')return allSedes;return[...new Set(raw.filter(r=>r.pais===pais).map(r=>r.sede))].sort();}
@@ -1835,8 +1889,8 @@ window.switchTab=function(tab){
 };
 
 function buildBar(){
-  const d=fRaw(); const vs=visSedes();
-  const ac=document.getElementById('catFilter').value==='ALL'?cats:[document.getElementById('catFilter').value];
+  const d=fRawNoCat(); const vs=visSedes();
+  const ac=cats;
   const ds=ac.map(cat=>({label:cat,data:vs.map(s=>{const sc=d.filter(r=>r.sede===s&&r.cat===cat&&r.score!==null).map(r=>r.score);const a=avg(sc);return a!==null?parseFloat(a.toFixed(1)):null;}),backgroundColor:catColors[cat]+'bb',borderColor:catColors[cat],borderWidth:1,borderRadius:4}));
   document.getElementById('legBar').innerHTML=ac.map(c=>`<span><span class="legend-dot" style="background:${catColors[c]}"></span>${c}</span>`).join('');
   if(bCI)bCI.destroy();
@@ -2085,11 +2139,18 @@ const googleRaw=[
   {fecha:'2026-07-24',pais:'COL',sede:'SAL',anio:2026,mes:'JULIO',score:4.8,mentions:619},
   {fecha:'2026-07-31',pais:'COL',sede:'GET',anio:2026,mes:'JULIO',score:5,mentions:159},
   {fecha:'2026-07-31',pais:'COL',sede:'CTG',anio:2026,mes:'JULIO',score:4.9,mentions:125},
-  {fecha:'2026-07-31',pais:'COL',sede:'SMR',anio:2026,mes:'JULIO',score:4.9,mentions:839},
+  {fecha:'2026-07-31',pais:'COL',sede:'SMR',anio:2026,mes:'JULIO',score:4.9,mentions:838},
   {fecha:'2026-07-31',pais:'COL',sede:'GTP',anio:2026,mes:'JULIO',score:4.9,mentions:441},
   {fecha:'2026-07-31',pais:'COL',sede:'BOG',anio:2026,mes:'JULIO',score:4.9,mentions:796},
   {fecha:'2026-07-31',pais:'COL',sede:'MDE',anio:2026,mes:'JULIO',score:4.8,mentions:603},
-  {fecha:'2026-07-31',pais:'COL',sede:'SAL',anio:2026,mes:'JULIO',score:4.8,mentions:630}
+  {fecha:'2026-07-31',pais:'COL',sede:'SAL',anio:2026,mes:'JULIO',score:4.8,mentions:630},
+  {fecha:'2026-08-14',pais:'COL',sede:'GET',anio:2026,mes:'JULIO',score:5,mentions:178},
+  {fecha:'2026-08-14',pais:'COL',sede:'CTG',anio:2026,mes:'JULIO',score:4.9,mentions:127},
+  {fecha:'2026-08-14',pais:'COL',sede:'SMR',anio:2026,mes:'JULIO',score:4.9,mentions:838},
+  {fecha:'2026-08-14',pais:'COL',sede:'GTP',anio:2026,mes:'JULIO',score:4.9,mentions:504},
+  {fecha:'2026-08-14',pais:'COL',sede:'BOG',anio:2026,mes:'JULIO',score:4.9,mentions:796},
+  {fecha:'2026-08-14',pais:'COL',sede:'MDE',anio:2026,mes:'JULIO',score:4.8,mentions:602},
+  {fecha:'2026-08-14',pais:'COL',sede:'SAL',anio:2026,mes:'JULIO',score:4.8,mentions:641}
 ];
 
 const googleSedes=[...new Set(googleRaw.map(r=>r.sede))].sort();
