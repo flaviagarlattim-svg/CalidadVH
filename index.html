@@ -580,25 +580,11 @@ select:focus { border-color: #e8390e; box-shadow: 0 0 0 3px rgba(232,57,14,0.12)
       <!-- METRICS GOOGLE -->
       <div class="metrics" style="grid-template-columns:repeat(3,minmax(0,1fr))" id="metricCardsGoogle"></div>
 
-      <!-- PUNTUACIÓN POR SEDE — BARRAS -->
-      <div class="grid2">
-        <div class="card">
-          <div class="chart-title">Puntuación por sede</div>
-          <div class="legend" id="legGoogleBar"></div>
-          <div style="position:relative;height:240px"><canvas id="googleBarChart"></canvas></div>
-        </div>
-        <div class="card">
-          <div class="chart-title">Evolución mensual de puntuación</div>
-          <div class="legend" id="legGoogleLine"></div>
-          <div style="position:relative;height:240px"><canvas id="googleLineChart"></canvas></div>
-        </div>
-      </div>
-
-      <!-- EVOLUCIÓN MENCIONES -->
+      <!-- MENCIONES POR SEDE (TABLA) -->
       <div class="card">
-        <div class="chart-title">Evolución de menciones mes a mes</div>
-        <div class="legend" id="legGoogleMenLine"></div>
-        <div style="position:relative;height:240px"><canvas id="googleMenLineChart"></canvas></div>
+        <div class="chart-title" style="margin-bottom:14px">Menciones y score por sede</div>
+        <div id="googleMenTable"></div>
+        <p class="chart-sub">Score acumulado y menciones adicionales del período · responde a filtros de país, año y mes</p>
       </div>
 
       <!-- DETALLE POR SEDE Y MES -->
@@ -2171,12 +2157,23 @@ const googleRaw=[
 
 const googleSedes=[...new Set(googleRaw.map(r=>r.sede))].sort();
 const googleMeses=[...new Set(googleRaw.map(r=>r.mes))];
-let googleBarCI,googleLineCI,googleMenBarCI,googleMenLineCI,googleDetailCI;
+let googleDetailCI;
 let selGoogle=googleSedes[0];
 
 function fGoogle(){
   const{pais,anio}=getF();
   return googleRaw.filter(r=>(pais==='ALL'||r.pais===pais)&&(anio==='ALL'||r.anio==anio));
+}
+
+function fGoogleFull(){
+  const{pais,anio,mes}=getF();
+  return googleRaw.filter(r=>{
+    if(pais!=='ALL'&&r.pais!==pais)return false;
+    const fd=new Date(r.fecha+'T00:00:00');
+    if(anio!=='ALL'&&fd.getFullYear()!=anio)return false;
+    if(mes!=='ALL'&&meses[fd.getMonth()]!==mes)return false;
+    return true;
+  });
 }
 
 function buildGoogle(){
@@ -2195,25 +2192,34 @@ function buildGoogle(){
     <div class="metric"><div class="metric-label">Total menciones</div><div class="metric-value">${totalMen.toLocaleString()}</div><div class="metric-sub">período seleccionado</div></div>
   `;
 
-  // ── BAR: puntuación por sede ──
-  const barData=visS.map(s=>{const rows=d.filter(r=>r.sede===s);return rows.length?parseFloat((rows.reduce((a,r)=>a+r.score,0)/rows.length).toFixed(2)):null;});
-  document.getElementById('legGoogleBar').innerHTML='';
-  if(googleBarCI)googleBarCI.destroy();
-  googleBarCI=new Chart(document.getElementById('googleBarChart'),{type:'bar',data:{labels:visS,datasets:[{label:'Puntuación',data:barData,backgroundColor:'#e8390ebb',borderColor:'#e8390e',borderWidth:1,borderRadius:4}]},options:{...base,scales:{x:{...base.scales.x},y:{...base.scales.y,min:4,max:5,ticks:{...tk,callback:v=>v.toFixed(1)}}}}});
-
-  // ── LINE: evolución mensual de puntuación (promedio por mes, una línea por sede) ──
-  const availM=[...new Set(d.map(r=>r.mes))].sort((a,b)=>meses.indexOf(a)-meses.indexOf(b));
-  const lineLabels=availM.map(m=>m.charAt(0)+m.slice(1).toLowerCase());
-  const lineDs=visS.map((s,i)=>({label:s,data:availM.map(m=>{const rows=d.filter(r=>r.sede===s&&r.mes===m);return rows.length?parseFloat((rows.reduce((a,r)=>a+r.score,0)/rows.length).toFixed(2)):null;}),borderColor:gabSedeColors[i%gabSedeColors.length],backgroundColor:gabSedeColors[i%gabSedeColors.length]+'22',tension:0.4,pointRadius:4,pointBackgroundColor:gabSedeColors[i%gabSedeColors.length],borderWidth:2}));
-  document.getElementById('legGoogleLine').innerHTML=visS.map((s,i)=>`<span><span class="legend-dot" style="background:${gabSedeColors[i%gabSedeColors.length]}"></span>${s}</span>`).join('');
-  if(googleLineCI)googleLineCI.destroy();
-  googleLineCI=new Chart(document.getElementById('googleLineChart'),{type:'line',data:{labels:lineLabels,datasets:lineDs},options:{...base,scales:{x:{...base.scales.x},y:{...base.scales.y,min:4,max:5,ticks:{...tk,callback:v=>v.toFixed(1)}}}}});
-
-  // ── LINE: evolución de menciones mes a mes (promedio por mes, una línea por sede) ──
-  const menLineDs=visS.map((s,i)=>({label:s,data:availM.map(m=>{const rows=d.filter(r=>r.sede===s&&r.mes===m);return rows.length?parseFloat((rows.reduce((a,r)=>a+r.mentions,0)/rows.length).toFixed(1)):null;}),borderColor:gabSedeColors[i%gabSedeColors.length],backgroundColor:gabSedeColors[i%gabSedeColors.length]+'18',tension:0.4,pointRadius:4,pointBackgroundColor:gabSedeColors[i%gabSedeColors.length],borderWidth:2}));
-  document.getElementById('legGoogleMenLine').innerHTML=visS.map((s,i)=>`<span><span class="legend-dot" style="background:${gabSedeColors[i%gabSedeColors.length]}"></span>${s}</span>`).join('');
-  if(googleMenLineCI)googleMenLineCI.destroy();
-  googleMenLineCI=new Chart(document.getElementById('googleMenLineChart'),{type:'line',data:{labels:lineLabels,datasets:menLineDs},options:{...base,scales:{x:{...base.scales.x},y:{...base.scales.y,beginAtZero:true}}}});
+  // ── TABLA: score acumulado y menciones adicionales por sede (país/año/mes) ──
+  const dm=fGoogleFull();
+  const sedesM=[...new Set(dm.map(r=>r.sede))].sort();
+  const menRows=sedesM.map(s=>{
+    const rows=dm.filter(r=>r.sede===s).sort((a,b)=>a.fecha.localeCompare(b.fecha));
+    const scoreTotal=Math.max(...rows.map(r=>r.score));
+    const menAdd=rows.length>1?rows[rows.length-1].mentions-rows[0].mentions:0;
+    return{sede:s,scoreTotal,menAdd,n:rows.length};
+  }).sort((a,b)=>b.scoreTotal-a.scoreTotal);
+  let menTableRows='';
+  menRows.forEach((r,i)=>{
+    const bg=i%2===0?'#f8fafc':'#fff';
+    menTableRows+=`<tr style="background:${bg}">
+      <td style="padding:10px 12px;font-size:13px;font-weight:700;color:#1e293b;border-bottom:1px solid #f1f5f9">${r.sede}</td>
+      <td style="padding:10px 12px;font-size:12px;color:#94a3b8;border-bottom:1px solid #f1f5f9">${r.n} lectura(s)</td>
+      <td style="text-align:right;padding:10px 12px;border-bottom:1px solid #f1f5f9"><span style="font-size:15px;font-weight:700;color:#16a34a">${r.scoreTotal.toFixed(1)}</span></td>
+      <td style="text-align:right;padding:10px 12px;border-bottom:1px solid #f1f5f9"><span style="font-size:15px;font-weight:700;color:#0ea5e9">${r.menAdd>=0?'+':''}${r.menAdd.toLocaleString()}</span></td>
+    </tr>`;
+  });
+  document.getElementById('googleMenTable').innerHTML=menRows.length?`<div style="overflow-x:auto;border-radius:10px;border:1px solid #e2e8f0"><table style="width:100%;border-collapse:collapse">
+    <thead><tr>
+      <th style="text-align:left;padding:10px 12px;font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;border-bottom:2px solid #e2e8f0;background:#f8fafc">Sede</th>
+      <th style="text-align:left;padding:10px 12px;font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;border-bottom:2px solid #e2e8f0;background:#f8fafc">Lecturas</th>
+      <th style="text-align:right;padding:10px 12px;font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;border-bottom:2px solid #e2e8f0;background:#f8fafc">Score acumulado</th>
+      <th style="text-align:right;padding:10px 12px;font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;border-bottom:2px solid #e2e8f0;background:#f8fafc">Menciones adicionales</th>
+    </tr></thead>
+    <tbody>${menTableRows}</tbody>
+  </table></div>`:`<div style="text-align:center;padding:32px 20px"><div style="font-size:24px;color:#cbd5e1;margin-bottom:10px">◎</div><div style="font-size:14px;color:#94a3b8">Sin datos de Google A&B para este filtro</div></div>`;
 
   // ── DETALLE POR SEDE Y MES: gráfica combinada (score vs meta + menciones) ──
   buildGoogleDetail();
