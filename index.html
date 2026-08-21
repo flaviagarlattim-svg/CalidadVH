@@ -618,18 +618,11 @@ select:focus { border-color: #e8390e; box-shadow: 0 0 0 3px rgba(232,57,14,0.12)
       <!-- METRICS PRODUCTO -->
       <div class="metrics" style="grid-template-columns:repeat(4,minmax(0,1fr))" id="metricCardsProducto"></div>
 
-      <!-- GRÁFICAS -->
-      <div class="grid2">
-        <div class="card">
-          <div class="chart-title">Puntaje por producto</div>
-          <div class="legend" id="legProdBar"></div>
-          <div style="position:relative;height:280px"><canvas id="prodBarChart"></canvas></div>
-        </div>
-        <div class="card">
-          <div class="chart-title">Puntaje promedio por sede</div>
-          <div class="legend" id="legProdSede"></div>
-          <div style="position:relative;height:280px"><canvas id="prodSedeChart"></canvas></div>
-        </div>
+      <!-- TABLA: RANKING GLOBAL POR SEDE -->
+      <div class="card">
+        <div class="chart-title" style="margin-bottom:14px">Puntaje global por sede</div>
+        <div id="prodSedeRankTable"></div>
+        <p class="chart-sub">Promedio de evaluaciones por sede · responde solo a filtros de país, año y mes</p>
       </div>
 
       <!-- TABLA DETALLE -->
@@ -2368,12 +2361,27 @@ function updateSedeOptions(){
 }
 
 function fProducto(){
-  const{pais,sede}=getF();
-  return productoRaw.filter(r=>(pais==='ALL'||r.pais===pais)&&(sede==='ALL'||r.sede===sede));
+  const{pais,anio,mes,sede}=getF();
+  return productoRaw.filter(r=>{
+    if(pais!=='ALL'&&r.pais!==pais)return false;
+    if(sede!=='ALL'&&r.sede!==sede)return false;
+    const fd=new Date(r.fecha+'T00:00:00');
+    if(anio!=='ALL'&&fd.getFullYear()!=anio)return false;
+    if(mes!=='ALL'&&meses[fd.getMonth()]!==mes)return false;
+    return true;
+  });
 }
 
-let prodBarCI,prodSedeCI;
-const tipoColors={'BEBIDA':'#e8390e','PLATO':'#0ea5e9'};
+function fProductoNoSede(){
+  const{pais,anio,mes}=getF();
+  return productoRaw.filter(r=>{
+    if(pais!=='ALL'&&r.pais!==pais)return false;
+    const fd=new Date(r.fecha+'T00:00:00');
+    if(anio!=='ALL'&&fd.getFullYear()!=anio)return false;
+    if(mes!=='ALL'&&meses[fd.getMonth()]!==mes)return false;
+    return true;
+  });
+}
 
 function buildProducto(){
   const d=fProducto();
@@ -2392,22 +2400,32 @@ function buildProducto(){
     <div class="metric"><div class="metric-label">Prom. platos</div><div class="metric-value">${avgPla!==null?avgPla.toFixed(1)+'%':'—'}</div><div class="metric-sub">${platos.length} plato(s)</div></div>
   `;
 
-  // ── BAR: puntaje por producto ──
-  const sorted=[...d].sort((a,b)=>b.score-a.score);
-  const labels=sorted.map(r=>r.producto);
-  const barData=sorted.map(r=>parseFloat((r.score*100).toFixed(1)));
-  const barColors=sorted.map(r=>tipoColors[r.tipo]+'bb');
-  const barBorders=sorted.map(r=>tipoColors[r.tipo]);
-  document.getElementById('legProdBar').innerHTML=`<span><span class="legend-dot" style="background:#e8390e"></span>Bebida</span><span><span class="legend-dot" style="background:#0ea5e9"></span>Plato</span>`;
-  if(prodBarCI)prodBarCI.destroy();
-  prodBarCI=new Chart(document.getElementById('prodBarChart'),{type:'bar',data:{labels,datasets:[{label:'Puntaje',data:barData,backgroundColor:barColors,borderColor:barBorders,borderWidth:1,borderRadius:4}]},options:{...base,indexAxis:'y',scales:{x:{...base.scales.x,min:0,max:100,ticks:{...tk,callback:v=>v+'%'}},y:{...base.scales.y,ticks:{...tk,autoSkip:false,font:{size:10}}}}}});
-
-  // ── BAR: promedio por sede ──
-  const sedes=[...new Set(d.map(r=>r.sede))].sort();
-  const sedeData=sedes.map(s=>{const rows=d.filter(r=>r.sede===s);return parseFloat((rows.reduce((a,r)=>a+r.score,0)/rows.length*100).toFixed(1));});
-  document.getElementById('legProdSede').innerHTML='';
-  if(prodSedeCI)prodSedeCI.destroy();
-  prodSedeCI=new Chart(document.getElementById('prodSedeChart'),{type:'bar',data:{labels:sedes,datasets:[{label:'Puntaje promedio',data:sedeData,backgroundColor:'#e8390ebb',borderColor:'#e8390e',borderWidth:1,borderRadius:4}]},options:{...base,scales:{x:{...base.scales.x},y:{...base.scales.y,min:0,max:100,ticks:{...tk,callback:v=>v+'%'}}}}});
+  // ── TABLA: puntaje global por sede (solo país/año/mes) ──
+  const dns=fProductoNoSede();
+  const sedesRank=[...new Set(dns.map(r=>r.sede))].map(s=>{
+    const rows=dns.filter(r=>r.sede===s);
+    return{sede:s,n:rows.length,avg:rows.reduce((a,r)=>a+r.score,0)/rows.length*100};
+  }).sort((a,b)=>b.avg-a.avg);
+  let rankRows='';
+  sedesRank.forEach((r,i)=>{
+    const bg=i%2===0?'#f8fafc':'#fff';
+    const scoreColor=r.avg>=95?'#16a34a':r.avg>=85?'#f59e0b':'#dc2626';
+    rankRows+=`<tr style="background:${bg}">
+      <td style="padding:10px 12px;font-size:13px;font-weight:700;color:#94a3b8;width:40px">${i+1}</td>
+      <td style="padding:10px 12px;font-size:13px;font-weight:700;color:#1e293b;border-bottom:1px solid #f1f5f9">${r.sede}</td>
+      <td style="padding:10px 12px;font-size:12px;color:#94a3b8;border-bottom:1px solid #f1f5f9">${r.n} evaluación(es)</td>
+      <td style="text-align:right;padding:10px 12px;border-bottom:1px solid #f1f5f9"><span style="font-size:15px;font-weight:700;color:${scoreColor}">${r.avg.toFixed(1)}%</span></td>
+    </tr>`;
+  });
+  document.getElementById('prodSedeRankTable').innerHTML=sedesRank.length?`<div style="overflow-x:auto;border-radius:10px;border:1px solid #e2e8f0"><table style="width:100%;border-collapse:collapse">
+    <thead><tr>
+      <th style="text-align:left;padding:10px 12px;font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;border-bottom:2px solid #e2e8f0;background:#f8fafc">#</th>
+      <th style="text-align:left;padding:10px 12px;font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;border-bottom:2px solid #e2e8f0;background:#f8fafc">Sede</th>
+      <th style="text-align:left;padding:10px 12px;font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;border-bottom:2px solid #e2e8f0;background:#f8fafc">Evaluaciones</th>
+      <th style="text-align:right;padding:10px 12px;font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;border-bottom:2px solid #e2e8f0;background:#f8fafc">Puntaje global</th>
+    </tr></thead>
+    <tbody>${rankRows}</tbody>
+  </table></div>`:`<div style="text-align:center;padding:32px 20px"><div style="font-size:24px;color:#cbd5e1;margin-bottom:10px">◎</div><div style="font-size:14px;color:#94a3b8">Sin datos de Evaluación Producto para este filtro</div></div>`;
 
   // ── TABLA ──
   const tsorted=[...d].sort((a,b)=>a.sede.localeCompare(b.sede)||b.score-a.score);
