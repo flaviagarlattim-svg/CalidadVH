@@ -584,7 +584,7 @@ select:focus { border-color: #e8390e; box-shadow: 0 0 0 3px rgba(232,57,14,0.12)
       <div class="card">
         <div class="chart-title" style="margin-bottom:14px">Menciones y score por sede</div>
         <div id="googleMenTable"></div>
-        <p class="chart-sub">Score acumulado y menciones adicionales del período · responde a filtros de país, año y mes</p>
+        <p class="chart-sub">Score acumulado, nuevas menciones del mes y menciones totales acumuladas · responde a filtros de país, año y mes</p>
       </div>
 
       <!-- DETALLE POR SEDE Y MES -->
@@ -2104,55 +2104,62 @@ const productoRaw=[
 ];
 
 const googleRaw=[
-  {fecha:'2026-06-30',pais:'COL',sede:'GET',anio:2026,mes:'JUNIO',score:4.9,mentions:80},
-  {fecha:'2026-06-30',pais:'COL',sede:'CTG',anio:2026,mes:'JUNIO',score:4.9,mentions:103},
-  {fecha:'2026-06-30',pais:'COL',sede:'SMR',anio:2026,mes:'JUNIO',score:4.8,mentions:762},
-  {fecha:'2026-06-30',pais:'COL',sede:'GTP',anio:2026,mes:'JUNIO',score:4.9,mentions:405},
-  {fecha:'2026-06-30',pais:'COL',sede:'BOG',anio:2026,mes:'JUNIO',score:4.9,mentions:796},
-  {fecha:'2026-06-30',pais:'COL',sede:'MDE',anio:2026,mes:'JUNIO',score:4.8,mentions:597},
-  {fecha:'2026-06-30',pais:'COL',sede:'SAL',anio:2026,mes:'JUNIO',score:4.8,mentions:617},
-  {fecha:'2026-07-10',pais:'COL',sede:'GET',anio:2026,mes:'JULIO',score:4.9,mentions:106},
-  {fecha:'2026-07-10',pais:'COL',sede:'CTG',anio:2026,mes:'JULIO',score:4.9,mentions:115},
-  {fecha:'2026-07-10',pais:'COL',sede:'SMR',anio:2026,mes:'JULIO',score:4.9,mentions:838},
-  {fecha:'2026-07-10',pais:'COL',sede:'GTP',anio:2026,mes:'JULIO',score:4.9,mentions:405},
-  {fecha:'2026-07-10',pais:'COL',sede:'BOG',anio:2026,mes:'JULIO',score:4.9,mentions:796},
-  {fecha:'2026-07-10',pais:'COL',sede:'MDE',anio:2026,mes:'JULIO',score:4.8,mentions:600},
-  {fecha:'2026-07-10',pais:'COL',sede:'SAL',anio:2026,mes:'JULIO',score:4.8,mentions:617},
-  {fecha:'2026-07-17',pais:'COL',sede:'GET',anio:2026,mes:'JULIO',score:5,mentions:140},
-  {fecha:'2026-07-17',pais:'COL',sede:'CTG',anio:2026,mes:'JULIO',score:4.9,mentions:124},
-  {fecha:'2026-07-17',pais:'COL',sede:'SMR',anio:2026,mes:'JULIO',score:4.9,mentions:838},
-  {fecha:'2026-07-17',pais:'COL',sede:'GTP',anio:2026,mes:'JULIO',score:4.9,mentions:406},
-  {fecha:'2026-07-17',pais:'COL',sede:'BOG',anio:2026,mes:'JULIO',score:4.9,mentions:796},
-  {fecha:'2026-07-17',pais:'COL',sede:'MDE',anio:2026,mes:'JULIO',score:4.8,mentions:602},
-  {fecha:'2026-07-17',pais:'COL',sede:'SAL',anio:2026,mes:'JULIO',score:4.8,mentions:618},
-  {fecha:'2026-07-24',pais:'COL',sede:'GET',anio:2026,mes:'JULIO',score:5,mentions:147},
-  {fecha:'2026-07-24',pais:'COL',sede:'CTG',anio:2026,mes:'JULIO',score:4.9,mentions:125},
-  {fecha:'2026-07-24',pais:'COL',sede:'SMR',anio:2026,mes:'JULIO',score:4.9,mentions:839},
-  {fecha:'2026-07-24',pais:'COL',sede:'GTP',anio:2026,mes:'JULIO',score:4.9,mentions:425},
-  {fecha:'2026-07-24',pais:'COL',sede:'BOG',anio:2026,mes:'JULIO',score:4.9,mentions:796},
-  {fecha:'2026-07-24',pais:'COL',sede:'MDE',anio:2026,mes:'JULIO',score:4.8,mentions:602},
-  {fecha:'2026-07-24',pais:'COL',sede:'SAL',anio:2026,mes:'JULIO',score:4.8,mentions:619},
-  {fecha:'2026-07-31',pais:'COL',sede:'GET',anio:2026,mes:'JULIO',score:5,mentions:159},
-  {fecha:'2026-07-31',pais:'COL',sede:'CTG',anio:2026,mes:'JULIO',score:4.9,mentions:125},
-  {fecha:'2026-07-31',pais:'COL',sede:'SMR',anio:2026,mes:'JULIO',score:4.9,mentions:838},
-  {fecha:'2026-07-31',pais:'COL',sede:'GTP',anio:2026,mes:'JULIO',score:4.9,mentions:441},
-  {fecha:'2026-07-31',pais:'COL',sede:'BOG',anio:2026,mes:'JULIO',score:4.9,mentions:796},
-  {fecha:'2026-07-31',pais:'COL',sede:'MDE',anio:2026,mes:'JULIO',score:4.8,mentions:603},
-  {fecha:'2026-07-31',pais:'COL',sede:'SAL',anio:2026,mes:'JULIO',score:4.8,mentions:630},
-  {fecha:'2026-08-14',pais:'COL',sede:'GET',anio:2026,mes:'JULIO',score:5,mentions:178},
-  {fecha:'2026-08-14',pais:'COL',sede:'CTG',anio:2026,mes:'JULIO',score:4.9,mentions:127},
-  {fecha:'2026-08-14',pais:'COL',sede:'SMR',anio:2026,mes:'JULIO',score:4.9,mentions:838},
-  {fecha:'2026-08-14',pais:'COL',sede:'GTP',anio:2026,mes:'JULIO',score:4.9,mentions:504},
-  {fecha:'2026-08-14',pais:'COL',sede:'BOG',anio:2026,mes:'JULIO',score:4.9,mentions:796},
-  {fecha:'2026-08-14',pais:'COL',sede:'MDE',anio:2026,mes:'JULIO',score:4.8,mentions:602},
-  {fecha:'2026-08-14',pais:'COL',sede:'SAL',anio:2026,mes:'JULIO',score:4.8,mentions:641},
-  {fecha:'2026-08-21',pais:'COL',sede:'GET',anio:2026,mes:'JULIO',score:5,mentions:190},
-  {fecha:'2026-08-21',pais:'COL',sede:'CTG',anio:2026,mes:'JULIO',score:4.9,mentions:127},
-  {fecha:'2026-08-21',pais:'COL',sede:'SMR',anio:2026,mes:'JULIO',score:4.9,mentions:838},
-  {fecha:'2026-08-21',pais:'COL',sede:'GTP',anio:2026,mes:'JULIO',score:4.9,mentions:530},
-  {fecha:'2026-08-21',pais:'COL',sede:'BOG',anio:2026,mes:'JULIO',score:4.9,mentions:796},
-  {fecha:'2026-08-21',pais:'COL',sede:'MDE',anio:2026,mes:'JULIO',score:4.8,mentions:602},
-  {fecha:'2026-08-21',pais:'COL',sede:'SAL',anio:2026,mes:'JULIO',score:4.8,mentions:642}
+  {fecha:'2026-06-30',pais:'COL',sede:'GET',anio:2026,mes:'junio',score:4.9,mentions:80},
+  {fecha:'2026-06-30',pais:'COL',sede:'CTG',anio:2026,mes:'junio',score:4.9,mentions:103},
+  {fecha:'2026-06-30',pais:'COL',sede:'SMR',anio:2026,mes:'junio',score:4.8,mentions:762},
+  {fecha:'2026-06-30',pais:'COL',sede:'GTP',anio:2026,mes:'junio',score:4.9,mentions:405},
+  {fecha:'2026-06-30',pais:'COL',sede:'BOG',anio:2026,mes:'junio',score:4.9,mentions:796},
+  {fecha:'2026-06-30',pais:'COL',sede:'MDE',anio:2026,mes:'junio',score:4.8,mentions:597},
+  {fecha:'2026-06-30',pais:'COL',sede:'SAL',anio:2026,mes:'junio',score:4.8,mentions:617},
+  {fecha:'2026-07-10',pais:'COL',sede:'GET',anio:2026,mes:'julio',score:4.9,mentions:106},
+  {fecha:'2026-07-10',pais:'COL',sede:'CTG',anio:2026,mes:'julio',score:4.9,mentions:115},
+  {fecha:'2026-07-10',pais:'COL',sede:'SMR',anio:2026,mes:'julio',score:4.9,mentions:838},
+  {fecha:'2026-07-10',pais:'COL',sede:'GTP',anio:2026,mes:'julio',score:4.9,mentions:405},
+  {fecha:'2026-07-10',pais:'COL',sede:'BOG',anio:2026,mes:'julio',score:4.9,mentions:796},
+  {fecha:'2026-07-10',pais:'COL',sede:'MDE',anio:2026,mes:'julio',score:4.8,mentions:600},
+  {fecha:'2026-07-10',pais:'COL',sede:'SAL',anio:2026,mes:'julio',score:4.8,mentions:617},
+  {fecha:'2026-07-17',pais:'COL',sede:'GET',anio:2026,mes:'julio',score:5,mentions:140},
+  {fecha:'2026-07-17',pais:'COL',sede:'CTG',anio:2026,mes:'julio',score:4.9,mentions:124},
+  {fecha:'2026-07-17',pais:'COL',sede:'SMR',anio:2026,mes:'julio',score:4.9,mentions:838},
+  {fecha:'2026-07-17',pais:'COL',sede:'GTP',anio:2026,mes:'julio',score:4.9,mentions:406},
+  {fecha:'2026-07-17',pais:'COL',sede:'BOG',anio:2026,mes:'julio',score:4.9,mentions:796},
+  {fecha:'2026-07-17',pais:'COL',sede:'MDE',anio:2026,mes:'julio',score:4.8,mentions:602},
+  {fecha:'2026-07-17',pais:'COL',sede:'SAL',anio:2026,mes:'julio',score:4.8,mentions:618},
+  {fecha:'2026-07-24',pais:'COL',sede:'GET',anio:2026,mes:'julio',score:5,mentions:147},
+  {fecha:'2026-07-24',pais:'COL',sede:'CTG',anio:2026,mes:'julio',score:4.9,mentions:125},
+  {fecha:'2026-07-24',pais:'COL',sede:'SMR',anio:2026,mes:'julio',score:4.9,mentions:839},
+  {fecha:'2026-07-24',pais:'COL',sede:'GTP',anio:2026,mes:'julio',score:4.9,mentions:425},
+  {fecha:'2026-07-24',pais:'COL',sede:'BOG',anio:2026,mes:'julio',score:4.9,mentions:796},
+  {fecha:'2026-07-24',pais:'COL',sede:'MDE',anio:2026,mes:'julio',score:4.8,mentions:602},
+  {fecha:'2026-07-24',pais:'COL',sede:'SAL',anio:2026,mes:'julio',score:4.8,mentions:619},
+  {fecha:'2026-07-31',pais:'COL',sede:'GET',anio:2026,mes:'julio',score:5,mentions:159},
+  {fecha:'2026-07-31',pais:'COL',sede:'CTG',anio:2026,mes:'julio',score:4.9,mentions:125},
+  {fecha:'2026-07-31',pais:'COL',sede:'SMR',anio:2026,mes:'julio',score:4.9,mentions:838},
+  {fecha:'2026-07-31',pais:'COL',sede:'GTP',anio:2026,mes:'julio',score:4.9,mentions:441},
+  {fecha:'2026-07-31',pais:'COL',sede:'BOG',anio:2026,mes:'julio',score:4.9,mentions:796},
+  {fecha:'2026-07-31',pais:'COL',sede:'MDE',anio:2026,mes:'julio',score:4.8,mentions:603},
+  {fecha:'2026-07-31',pais:'COL',sede:'SAL',anio:2026,mes:'julio',score:4.8,mentions:630},
+  {fecha:'2026-08-14',pais:'COL',sede:'GET',anio:2026,mes:'agosto',score:5,mentions:178},
+  {fecha:'2026-08-14',pais:'COL',sede:'CTG',anio:2026,mes:'agosto',score:4.9,mentions:127},
+  {fecha:'2026-08-14',pais:'COL',sede:'SMR',anio:2026,mes:'agosto',score:4.9,mentions:838},
+  {fecha:'2026-08-14',pais:'COL',sede:'GTP',anio:2026,mes:'agosto',score:4.9,mentions:504},
+  {fecha:'2026-08-14',pais:'COL',sede:'BOG',anio:2026,mes:'agosto',score:4.9,mentions:796},
+  {fecha:'2026-08-14',pais:'COL',sede:'MDE',anio:2026,mes:'agosto',score:4.8,mentions:602},
+  {fecha:'2026-08-14',pais:'COL',sede:'SAL',anio:2026,mes:'agosto',score:4.8,mentions:641},
+  {fecha:'2026-08-21',pais:'COL',sede:'GET',anio:2026,mes:'agosto',score:5,mentions:190},
+  {fecha:'2026-08-21',pais:'COL',sede:'CTG',anio:2026,mes:'agosto',score:4.9,mentions:127},
+  {fecha:'2026-08-21',pais:'COL',sede:'SMR',anio:2026,mes:'agosto',score:4.9,mentions:838},
+  {fecha:'2026-08-21',pais:'COL',sede:'GTP',anio:2026,mes:'agosto',score:4.9,mentions:530},
+  {fecha:'2026-08-21',pais:'COL',sede:'BOG',anio:2026,mes:'agosto',score:4.9,mentions:796},
+  {fecha:'2026-08-21',pais:'COL',sede:'MDE',anio:2026,mes:'agosto',score:4.8,mentions:602},
+  {fecha:'2026-08-21',pais:'COL',sede:'SAL',anio:2026,mes:'agosto',score:4.8,mentions:642},
+  {fecha:'2026-08-28',pais:'COL',sede:'GET',anio:2026,mes:'agosto',score:5,mentions:199},
+  {fecha:'2026-08-28',pais:'COL',sede:'CTG',anio:2026,mes:'agosto',score:4.9,mentions:127},
+  {fecha:'2026-08-28',pais:'COL',sede:'SMR',anio:2026,mes:'agosto',score:4.9,mentions:838},
+  {fecha:'2026-08-28',pais:'COL',sede:'GTP',anio:2026,mes:'agosto',score:4.9,mentions:548},
+  {fecha:'2026-08-28',pais:'COL',sede:'BOG',anio:2026,mes:'agosto',score:4.9,mentions:796},
+  {fecha:'2026-08-28',pais:'COL',sede:'MDE',anio:2026,mes:'agosto',score:4.8,mentions:602},
+  {fecha:'2026-08-28',pais:'COL',sede:'SAL',anio:2026,mes:'agosto',score:4.8,mentions:642}
 ];
 
 const googleSedes=[...new Set(googleRaw.map(r=>r.sede))].sort();
@@ -2199,7 +2206,8 @@ function buildGoogle(){
     const rows=dm.filter(r=>r.sede===s).sort((a,b)=>a.fecha.localeCompare(b.fecha));
     const scoreTotal=Math.max(...rows.map(r=>r.score));
     const menAdd=rows.length>1?rows[rows.length-1].mentions-rows[0].mentions:0;
-    return{sede:s,scoreTotal,menAdd,n:rows.length};
+    const menTotal=rows[rows.length-1].mentions;
+    return{sede:s,scoreTotal,menAdd,menTotal,n:rows.length};
   }).sort((a,b)=>b.scoreTotal-a.scoreTotal);
   let menTableRows='';
   menRows.forEach((r,i)=>{
@@ -2208,7 +2216,8 @@ function buildGoogle(){
       <td style="padding:10px 12px;font-size:13px;font-weight:700;color:#1e293b;border-bottom:1px solid #f1f5f9">${r.sede}</td>
       <td style="padding:10px 12px;font-size:12px;color:#94a3b8;border-bottom:1px solid #f1f5f9">${r.n} lectura(s)</td>
       <td style="text-align:right;padding:10px 12px;border-bottom:1px solid #f1f5f9"><span style="font-size:15px;font-weight:700;color:#16a34a">${r.scoreTotal.toFixed(1)}</span></td>
-      <td style="text-align:right;padding:10px 12px;border-bottom:1px solid #f1f5f9"><span style="font-size:15px;font-weight:700;color:#0ea5e9">${r.menAdd>=0?'+':''}${r.menAdd.toLocaleString()}</span></td>
+      <td style="text-align:right;padding:10px 12px;border-bottom:1px solid #f1f5f9"><span style="font-size:15px;font-weight:700;color:#0ea5e9">${r.menAdd.toLocaleString()}</span></td>
+      <td style="text-align:right;padding:10px 12px;border-bottom:1px solid #f1f5f9"><span style="font-size:15px;font-weight:700;color:#64748b">${r.menTotal.toLocaleString()}</span></td>
     </tr>`;
   });
   document.getElementById('googleMenTable').innerHTML=menRows.length?`<div style="overflow-x:auto;border-radius:10px;border:1px solid #e2e8f0"><table style="width:100%;border-collapse:collapse">
@@ -2216,7 +2225,8 @@ function buildGoogle(){
       <th style="text-align:left;padding:10px 12px;font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;border-bottom:2px solid #e2e8f0;background:#f8fafc">Sede</th>
       <th style="text-align:left;padding:10px 12px;font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;border-bottom:2px solid #e2e8f0;background:#f8fafc">Lecturas</th>
       <th style="text-align:right;padding:10px 12px;font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;border-bottom:2px solid #e2e8f0;background:#f8fafc">Score acumulado</th>
-      <th style="text-align:right;padding:10px 12px;font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;border-bottom:2px solid #e2e8f0;background:#f8fafc">Menciones adicionales</th>
+      <th style="text-align:right;padding:10px 12px;font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;border-bottom:2px solid #e2e8f0;background:#f8fafc">Menciones</th>
+      <th style="text-align:right;padding:10px 12px;font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;border-bottom:2px solid #e2e8f0;background:#f8fafc">Menciones totales</th>
     </tr></thead>
     <tbody>${menTableRows}</tbody>
   </table></div>`:`<div style="text-align:center;padding:32px 20px"><div style="font-size:24px;color:#cbd5e1;margin-bottom:10px">◎</div><div style="font-size:14px;color:#94a3b8">Sin datos de Google A&B para este filtro</div></div>`;
